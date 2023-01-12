@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<TRestManager name="SpecPlot" title="Example" verboseLevel="info">
+<TRestManager name="AxionPlots" title="REST School example" verboseLevel="info">
 	<globals>
 		<variable name="FORMAT" value="png" />
 	</globals>
-    <TRestRun name="DummyRun"/>
-    <TRestAnalysisPlot name="restplot" title="Optics Plots" verboseLevel="silent">
+    <TRestRun name="SchoolRun"/>
+    <TRestAnalysisPlot name="axionPlots" title="Optics Plots" verboseLevel="silent">
         <parameter name="previewPlot" value="false"/>
 		<canvas size="(2400,1600)" divide="(2,2)" save="axionPhysicsPlots.${FORMAT}"/>
         <!--- -->
@@ -45,5 +45,5 @@
             <cut variable="optics_efficiency" condition="&gt;0" value="ON"/>
         </plot>
     </TRestAnalysisPlot>
-    <addTask command="restplot-&gt;PlotCombinedCanvas()" value="ON"/>
+    <addTask command="axionPlots-&gt;PlotCombinedCanvas()" value="ON"/>
 </TRestManager>
