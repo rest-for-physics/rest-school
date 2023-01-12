@@ -1,0 +1,185 @@
+##################################
+# CAST detector setup
+# 1 Feminos + 1 FEC AGET
+# Data taking run
+##################################
+#
+##################################
+# Result file path
+##################################
+path /home/useriaxo/data_test
+file_chunk 1024 #For calibration runs (subrun lenght in MB)
+#file_chunk 100 #For background runs (subrun lenght in MB)
+##################################
+# Event Builder settings
+##################################
+eof_on_eoe 0
+event_builder 0
+##################################
+# Ring Buffer and DAQ cleanup
+##################################
+DAQ 0
+credits restore 8 1 F
+daq 0xFFFFFF F
+sca enable 0
+sleep 1
+serve_target 0
+sleep 4
+##################################
+# Feminos Settings 
+##################################
+# Number of SCA cells to readout. For AGET 0x200
+sca cnt 0x200
+##################################
+# Readout settings
+##################################
+modify_hit_reg 1 #Before 0 (16-06-2019)
+# Allow erase of hit register 
+erase_hit_ena 0
+# Allowable hit limit threshold
+erase_hit_thr * 2
+emit_hit_cnt 1
+emit_empty_ch 0
+emit_lst_cell_rd 0
+keep_rst 0
+skip_rst 1
+##################################
+# AGET settings
+##################################
+# Mode: 0x0: hit/selected channels 0x1:all channels
+aget * mode 0x0
+aget * tst_digout 0
+# Common coarse part of discriminator threshold
+aget 0 dac 0x3
+aget 1 dac 0x3
+aget 2 dac 0x3
+aget 3 dac 0x3
+# Individual channel fine part of discriminator threshold
+aget 0 threshold * 0x1
+aget 1 threshold * 0x1
+aget 2 threshold * 0x1
+aget 3 threshold * 0x1
+#aget 0 threshold 4:64 0xf
+##################################
+# Channel ena/disable (AGET only)
+##################################
+
+forceon_all 0 #before 0 (16-06-2019)
+forceon * * 0
+#forceon 0 20 1
+forceoff * * 0
+#forceoff 0 5:78 1
+
+#forceoff 0 1 0x0
+#forceoff 0 18 0x0
+#forceoff 0 53 0x0
+#forceoff 0 69 0x0
+
+aget * inhibit 1 0x1
+aget * inhibit 53 0x1
+aget * inhibit 18 0x1
+aget * inhibit 69 0x1
+
+aget * inhibit 1 0x1
+aget * inhibit 16 0x1
+aget * inhibit 49 0x1
+aget * inhibit 64 0x1
+
+#(Only for calibration, the channels out of the window are inhibited)
+#aget 0 inhibit 1:44 0x1
+#aget 1 inhibit 20:69 0x1
+#aget 2 inhibit 1:44 0x1
+#aget 3 inhibit 20:69 0x1
+
+#forceoff 0 1:44 0x1
+#forceoff 1 25:69 0x1
+#forceoff 2 1:44 0x1
+#forceoff 3 25:69 0x1
+
+#forceon 0 45:69 0x1
+#forceon 1 1:24 0x1
+#forceon 2 45:69 0x1
+#forceon 3 1:24 0x1
+
+aget 0 inhibit 2 0x1
+aget 0 inhibit 1 0x1 #crosstalk??
+aget 0 inhibit 3:5 0x1 #crosstalk??
+
+forceon 0 2 0x1
+
+##################################
+# Pedestal equalization and Zero-suppression
+##################################
+subtract_ped 1
+zero_suppress 0
+zs_pre_post 8 4
+##################################
+# Multiplicity Trigger settings
+##################################
+mult_thr 0 31 #31 newCard=31 
+mult_thr 1 27 #29 newCard=27 
+mult_thr 2 31 #28 newCard=31 
+mult_thr 3 29 #29 newCard=29 
+mult_limit 0 230 #80
+mult_limit 1 230 #80
+mult_limit 2 230 #80
+mult_limit 3 230 #80
+mult_trig_ena 1
+##################################
+# Event generator
+##################################
+# Event limit: 0x0:infinite; 0x1:1; 0x2:10; 0x3:100; 0x4: 1000; 0x5:10000; 0x6:100000; 0x7:1000000
+event_limit 0x0
+# trig_rate: trigger rate when the embedded periodic trigger generator is used.
+# Range: 0:0.1Hz-10Hz 1:10Hz-1kHz 2:100Hz-10kHz 3:1kHz-100kHz
+trig_rate 3 1
+trig_delay 0x190  #400
+#trig_delay 0x1C2  #450
+#trig_delay 0x1F4  #500
+# Trigger enable bits (OR several if desired): 0x1:generator / 0x2:trigger pin / 0x4:pulser / 0x8: TCM 
+trig_enable 0x0
+##################################
+# Set Data server target:
+#  0: drop data
+#  1: send to DAQ
+#  2: feed to pedestal histos
+#  3: feed to hit channel histos 
+##################################
+serve_target 1
+##################################
+# Clear dead-time histogram
+##################################
+hbusy clr
+hhit clr *
+##################################
+# Create result file
+##################################
+fopen
+##################################
+# Enable data taking
+##################################
+sca enable 1
+##################################
+# Data acquisition
+##################################
+#DAQ 200000000000
+DAQ 9000000000 #(9GB)
+##################################
+# Wait DAQ completion
+##################################
+LOOP 900
+DAQ
+sleep 1
+NEXT
+##################################
+# Show dead-time histogram
+##################################
+hbusy get
+hhit get 0
+hhit get 1
+hhit get 2
+hhit get 3
+##################################
+# Close result file
+##################################
+fclose
