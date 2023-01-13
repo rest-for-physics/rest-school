@@ -1,23 +1,78 @@
-You will need to move to this directory `day2/session1` to execute the commands proposed.
+You will need to move to the directory `day2/session1` to execute the proposed commands.
 
-### Exercise X. Testing TRestAnalysisPlot
+### Exercise 1. Units
+
+The units inside REST-for-Physics are available in the namespace `REST_Units`, a namespace defines a set of variables and methods that are accessible under that name when invoking `REST_Units::`.
+
+Inside a `restRoot` session we can use the namespace to identify which public data members and methods are available to us. Now, just open a new `restRoot` session and checkout what it is inside the namespace.
+
+```
+restRoot
+[0] REST_Units:: [TAB]
+```
+
+In particular, you will be able to identify few of the REST basic units defined inside.
+
+You may check now the scaling value associated to each unit.
+
+```
+[0] REST_Units::degrees [ENTER]
+(const double) 57.295780
+```
+
+Where the returned value corresponds to the degrees in one radian. The units inside REST work in a way that we can access the scaling factor by invoking `units("UNIT_STRING")`, which will allow us to make unit conversions inside our code. 
+
+For example, if we execute,
+
+```
+[1] 1. * units("cm")
+(double) 0.10000000
+```
+
+the result will be the number of `cm` inside 1 `mm` which is the default unit inside REST. We can also combine different units to achieve more complex results, such as:
+
+```
+[2] 1. * units("g/cm^3")
+(double) 1000000.0
+```
+
+If we know the value the units for the value we are providing, and this is not given in the default units, we will then need to write a more generic expression:
+
+```
+[3] 180. * units("rads")/units("degrees")
+(double) 3.1415927
+```
+
+REMEMBER: All these lines of code that you are using inside your `restRoot` session can be used inside a C++ compiled code, a C-macro, or even a python script that imports the REST-for-Physics libraries.
+
+
+### Exercise 2. TRestTools
+
+TRestTools is a class that defines static methods that can be invoked directly. It contains generic methods that can be of utility at some point in the process of building a new REST metadata class or process, or inside REST macros/scripts. The different methods can be found documented at [the following page](https://sultan.unizar.es/rest/classTRestTools.html).
+
+Some of the methods found in TRestTools will allow us to operate with tables. The `data` directory inside the [rest-school repository](https://github.com/rest-for-physics/rest-school) contains a binary table with extension `N150f` indicating us that it is a table with 150 columns, and its values are written with `float` precision.
+
+
+### Exercise 3. Testing TRestAnalysisPlot
 
 In this exercise we will launch restManager to produce a combined plot using the TRestAnalysisPlot metadata class. This class allows to define plots through a configuration file so that we can produce the same systematic plots for different datasets.
 
 #### First simple test
 
+We just provide the definition inside the rml config file. All the input files that satisfy the glob pattern will be combined.
+
 ```
-restManager --c axionPhysicsPlot.rml --f "../../data/run_*rayTracing*root"
+restManager --c analysisPlot.rml --f "../../data/run_*rayTracing*root"
 ```
 
-#### Chaging the output level
+#### Chaging the output verbose level
 
-To see the effect of output levels you may try to launch `restManager` with a higher verbose level adding the `--v` flag in the arguments.
+To see the effect of output levels you may try to launch now `restManager` with a higher verbose level adding the `--v` flag in the arguments.
 
 You may use:
 
 ```
-restManager --v 2 --c axionPhysicsPlot.rml --f "../../data/run_*rayTracing*root"
+restManager --v 2 --c analysisPlot.rml --f "../../data/run_*rayTracing*root"
 ```
 
 The `--v 2` flag is equal to `info` output level and it will override the verboseLevel given by the configuration file for each individual section or class definition.
@@ -52,3 +107,4 @@ Additionally you may update the title and labels to match what we are drawing "O
 
 You can also add a new plot, just copy/paste a complete `<plot>` entry and modify it as you did in the previous section. The only difference now is that you need to allocate an additional space at the `<canvas` define a grid that can host at least 5 plots, such as 3x2 or 2x3. The canvas size should be also updated according to the new number of plots.
 
+### Exercise 4. Testing TRestMetadataPlot
