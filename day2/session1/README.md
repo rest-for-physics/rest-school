@@ -52,8 +52,87 @@ TRestTools is a class that defines static methods that can be invoked directly. 
 
 Some of the methods found in TRestTools will allow us to operate with tables. The `data` directory inside the [rest-school repository](https://github.com/rest-for-physics/rest-school) contains a binary table with extension `N150f` indicating us that it is a table with 150 columns, and its values are written with `float` precision.
 
+We can read this table into a `std::vector <std::vector> >` previously generated data holder as follows:
 
-### Exercise 3. Testing TRestAnalysisPlot
+```
+root [4] std::vector <std::vector <float> > d;
+root [5] TRestTools::ReadBinaryTable( "../../data/XenonNeon_25Pct_1bar.N150f", d )
+```
+
+Then, we may access this table using the standard c++ libraries. To print on screen one element we may use:
+
+```
+root [6] d[10][10];
+```
+
+or to print the full table or show several rows on screen, we can do:
+
+```
+root [7] TRestTools::PrintTable ( d );
+root [8] TRestTools::PrintTable ( d, 10, 11 );
+```
+
+Other interesting methods inside `TRestTools` allow us to operate with filenames, such as substracting the filename from a full path, extracting the extension, or checking if the file exists or is accessible. For example:
+
+```
+root [9] TRestTools::GetFileNameRoot("../../data/XenonNeon_25Pct_1bar.N150f")
+(std::string) "XenonNeon_25Pct_1bar"
+```
+
+Now, we can create a ROOT macro, that uses those methods to fill a TH1D object with the sums from each row. Open a new file and test the following code:
+
+```
+Int_t GenerateHistogram( std::string fname ) {
+
+    /// Reading the table
+    std::vector <std::vector <float> > myTable;
+    TRestTools::ReadBinaryTable( "../../data/XenonNeon_25Pct_1bar.N150f", myTable );
+
+    /// Creating the histogram to be filled
+    TH1D *h = new TH1D( "Response", "XenonNeon_25Pct", myTable.size(), 0, 15);
+
+    int n = 0;
+    for( const auto &d : myTable ) {
+
+        /// We add all the values in a row to set the value of each histogram bin
+        float result = 0;
+        for( const auto &elem : d )
+            result += elem;
+    
+        n++; // First bin is 1
+
+		/// We fill the histogram
+        h->SetBinContent( n, result );
+    }
+    
+    std::string fnameRoot = TRestTools::GetFileNameRoot( fname );
+    
+	/// We must create the canvas where to draw before drawing!!
+    TCanvas c;
+
+    h->Draw();
+    h->GetXaxis()->SetTitle("Energy [keV]");
+    h->GetYaxis()->SetTitle("Efficiency");
+
+    c.Print( (TString) fnameRoot + ".png" );
+
+    return 0;
+}
+```
+
+Where in the above code we have used the fact that the data is a response matrix defined in the 0-15keV range.
+
+We can execute the macro inside the `restRoot` session by loading the generated file, and executing the method:
+
+```
+[10] .L GenerateHistogram.C
+[11] GenerateHistogram( "../../data/XenonNeon_25Pct_1bar.N150f" );
+```
+
+If the macro execution succeeds, you should have a new png image showing the resulting histogram.
+
+
+### Exercise 3. TRestAnalysisPlot
 
 In this exercise we will launch restManager to produce a combined plot using the TRestAnalysisPlot metadata class. This class allows to define plots through a configuration file so that we can produce the same systematic plots for different datasets.
 
@@ -65,7 +144,8 @@ We just provide the definition inside the rml config file. All the input files t
 restManager --c analysisPlot.rml --f "../../data/run_*rayTracing*root"
 ```
 
-#### Chaging the output verbose level
+
+#### Changing the output verbose level
 
 To see the effect of output levels you may try to launch now `restManager` with a higher verbose level adding the `--v` flag in the arguments.
 
@@ -105,6 +185,8 @@ Additionally you may update the title and labels to match what we are drawing "O
 
 #### Adding new plots
 
-You can also add a new plot, just copy/paste a complete `<plot>` entry and modify it as you did in the previous section. The only difference now is that you need to allocate an additional space at the `<canvas` define a grid that can host at least 5 plots, such as 3x2 or 2x3. The canvas size should be also updated according to the new number of plots.
+You can also add a new plot, just copy/paste a complete `<plot>` entry and modify it as you did in the previous section. The only difference now is that you need to allocate an additional space inside the `<canvas` entry to define a grid that can host at least 5 plots, such as 3x2 or 2x3. The canvas size should be also updated according to the new number of plots to keep the aspect ratio.
 
-### Exercise 4. Testing TRestMetadataPlot
+### Exercise 4. TRestMetadataPlot
+
+### Exercise 5. TRestDataSet
