@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<TRestManager name="AxionPlots" title="REST School example" verboseLevel="info">
+<TRestManager name="AnalysisPlots" title="REST School example" verboseLevel="info">
 	<globals>
 		<variable name="FORMAT" value="png" />
 	</globals>
@@ -7,7 +7,7 @@
     <TRestAnalysisPlot name="axionPlots" title="Optics Plots" verboseLevel="silent">
         <parameter name="previewPlot" value="false"/>
 		<canvas size="(2400,1600)" divide="(2,2)" save="axionPhysicsPlots.${FORMAT}"/>
-        <!--- -->
+        <!--- Plot 1 -->
         <plot name="EnergySpectrum" title="Energy Spectrum" xlabel="Energy [keV]" ylabel="Counts per bin" value="ON" stats="OFF" option="colz" marginTop="0.1" legend="ON">
             <histo name="noCuts" lineColor="1">
                 <variable name="initial_energy" nbins="500" range="(0,10.0)"/>
@@ -29,7 +29,8 @@
                 <cut variable="optics_efficiency" condition="&gt;0" value="ON"/>
             </histo>
         </plot>
-        <plot name="MagnetEntranceDistOptics" title="Magnet entrance distribution (Optics acceptance)" xlabel="X [mm]" ylabel="Y [mm]" value="ON" stats="OFF" option="colz" marginTop="0.1">
+        <!--- Plot 2 -->
+        <plot name="MagnetEntranceDistOptics" title="Magnet entrance distribution (Optics acceptance)" xlabel="X [mm]" ylabel="Y [mm]" value="ON" stats="ON" option="colz" marginTop="0.1">
             <variable name="magnetEntrance_posX" nbins="100"/>
             <variable name="magnetEntrance_posY" nbins="100"/>
             <cut variable="optics_efficiency" condition="&gt;0" value="ON"/>
@@ -39,7 +40,8 @@
             <variable name="initial_posY" nbins="100"/>
             <cut variable="optics_efficiency" condition="&gt;0" value="ON"/>
         </plot>
-        <plot name="FocalSpot" title="Spot at focal (all efficiencies)" xlabel="X [mm]" ylabel="Y [mm]" value="ON" stats="OFF" option="colz" marginTop="0.1" weight="optics_efficiency*window_transmission*boreExitGate_transmission*axionPhoton_transmission*axionPhoton_probability">
+        <!--- Plot 3 -->
+        <plot name="FocalSpot" title="Spot at focal (all efficiencies)" xlabel="X [mm]" ylabel="Y [mm]" value="ON" stats="ON" option="colz" marginTop="0.1" weight="optics_efficiency*window_transmission*boreExitGate_transmission*axionPhoton_transmission*axionPhoton_probability">
             <variable name="final_posX" nbins="100"/>
             <variable name="final_posY" nbins="100"/>
             <cut variable="optics_efficiency" condition="&gt;0" value="ON"/>
