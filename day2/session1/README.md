@@ -134,7 +134,7 @@ If the macro execution succeeds, you should have a new png image showing the res
 
 ### Exercise 3. TRestAnalysisPlot
 
-In this exercise we will launch restManager to produce a combined plot using the TRestAnalysisPlot metadata class. This class allows to define plots through a configuration file so that we can produce the same systematic plots for different datasets.
+In this exercise we will launch restManager to produce a combined plot using the `TRestAnalysisPlot` metadata class. This class allows to define plots through a configuration file so that we can produce the same systematic plots for different datasets.
 
 #### First simple test
 
@@ -189,4 +189,17 @@ You can also add a new plot, just copy/paste a complete `<plot>` entry and modif
 
 ### Exercise 4. TRestMetadataPlot
 
+In this exercise we will launch restManager to produce a combined plot using `TRestMetadataPlot`. In a similar way to `TRestAnalysisPlot`, this class will allow to generate systematic plots, this time using the values of the metadata members found in a set of input files. Thus, different metadata members can be plotted against the other metadata members, just as the run number or the run timestamp, as we will see in the following example.
+
+We provide the plot definitions inside the `metadataPlot.rml` config file. We will use now pre-generated processed files that correspond to real detector data that were generated using `TRestProcessRunner::inputEventStorage=False" and `TRestProcessRunner::outputEventStorage=False` so that only the `TRestAnalysisTree` and metadata objects are present inside the file.
+
+Now just try the following command to test the plot production. The first time we will need to create a directory `plots` where the plots will be created.
+
+```
+mkdir plots
+restManager --c metadataPlot.rml --f "../../data/*RawToTrack*root"
+```
+
 ### Exercise 5. TRestDataSet
+
+
