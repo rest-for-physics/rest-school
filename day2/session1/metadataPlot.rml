@@ -35,7 +35,7 @@
 		  </graph>
     </plot>
 
-    <plot name="rateVsRun" title="Raw acquisition rate versus time" 
+    <plot name="rateVsRun" title="Raw acquisition rate versus run number" 
 	      xlabel="Run number" ylabel="Rate [Hz]" value="ON"
 		  logX="false" logY="true" legend="on" timeDisplay="off"
 		  xVariable="TRestRun::fRunNumber" yRange="(0.01,1.e4)"
