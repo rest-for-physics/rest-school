@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<TRestManager name="MetadataPlots" title="REST School example" >
+
+  <TRestMetadataPlot name="mdPlot" title="Basic Plots" verboseLevel="info" >
+
+	<!-- If the canvas is previsualized the user is allowed to introduce
+		  changes before saving the canvas to the specified output files -->
+    <parameter name="previewPlot" value="false"/>
+
+	<legendPosition x1="0.25" x2="0.5" y1="0.75" y2="0.9" option="lp" />
+
+	<canvas size="(1600,600)" divide="(2,1)" save="plots/canvas.png"/>
+
+    <plot name="rateVsTime" title="Raw acquisition rate versus time" 
+	      xlabel="Date/Time" ylabel="Rate [Hz]" value="ON"
+		  logX="false" logY="true" legend="on" timeDisplay="on"
+		  xVariable="timestamp" yRange="(0.01,1.e4)"
+		  save="plots/rateVsTime.png" >
+
+		  <graph name="meanRateBckTime" title="Background rate"
+			  lineColor="1" lineWidth="2" lineStyle="2"
+			  markerStyle="23" markerSize="1" markerColor="22"
+			  option="PL">
+			  <parameter name="yVariable" value="TRestSummaryProcess->fMeanRate" />
+			  <parameter name="metadataRule" value="TRestRun->fRunTag==Background" />
+		  </graph>
+
+		  <graph name="meanRateCalTime" title="Calibration rate"
+			  lineColor="4" lineWidth="2" lineStyle="2"
+			  markerStyle="24" markerSize="2" markerColor="32"
+			  option="PL">
+			  <parameter name="yVariable" value="TRestSummaryProcess->fMeanRate" />
+			  <parameter name="metadataRule" value="TRestRun->fRunTag==Calibration" />
+		  </graph>
+    </plot>
+
+    <plot name="rateVsRun" title="Raw acquisition rate versus time" 
+	      xlabel="Run number" ylabel="Rate [Hz]" value="ON"
+		  logX="false" logY="true" legend="on" timeDisplay="off"
+		  xVariable="TRestRun::fRunNumber" yRange="(0.01,1.e4)"
+	      save="plots/rateVsRun.png" >
+
+		  <graph name="meanRateBckRun" title="Background rate"
+			  lineColor="1" lineWidth="2" lineStyle="2"
+			  markerStyle="23" markerSize="1" markerColor="22"
+			  option="PL">
+			  <parameter name="yVariable" value="TRestSummaryProcess->fMeanRate" />
+			  <parameter name="metadataRule" value="TRestRun->fRunTag==Background" />
+		  </graph>
+
+		  <graph name="meanRateCalRun" title="Calibration rate"
+			  lineColor="4" lineWidth="2" lineStyle="2"
+			  markerStyle="24" markerSize="2" markerColor="32"
+			  option="PL">
+			  <parameter name="yVariable" value="TRestSummaryProcess->fMeanRate" />
+			  <parameter name="metadataRule" value="TRestRun->fRunTag==Calibration" />
+		  </graph>
+    </plot>
+
+  </TRestMetadataPlot>
+
+  <addTask command="mdPlot->GenerateCanvas()" value="ON"/>
+
+</TRestManager>
+
+
+<!--paramater here is accessible to all the classes-->
