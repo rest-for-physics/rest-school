@@ -202,4 +202,12 @@ restManager --c metadataPlot.rml --f "../../data/*RawToTrack*root"
 
 ### Exercise 5. TRestDataSet
 
+A `TRestDataSet` instance will allow us to define certain conditions that need to be satisfied by a group of REST processed files. Once the object has been initialized it will give us access to a `TTree` and a `RDataFrame` from the combined data built with the selected files. 
 
+Inside the `dataset.rml` file you will find different dataset definitions that can be used to create a selection of files. For example, the dataset named `CalibrationsJune` will pick-up from the `RawTrack` files all those calibration runs that were measured in the month of June.
+
+In this example we will initialize that particular dataset and access the `RDataFrame` and `TTree` defined inside `TRestDataSet`.
+
+```
+TRestDataSet calJune("dataset.rml", "CalibrationsJune");
+```
