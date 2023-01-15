@@ -1,4 +1,4 @@
-You will need to move to the directory `day2/session2` to match the proposed commands with the relative paths given in the examples.
+You will need to move to the directory `day2/session3` to match the proposed commands with the relative paths given in the examples.
 
 As you learnt during the corresponding lecture, we can use the REST-for-Physics libraries in different environments, including the `restRoot` ROOT based interactive shell, `C-macros` executed by the ROOT interface interpreter, C++ compiled executables, or `python3` scripts.
 
@@ -65,25 +65,25 @@ We may now use any method defined at the recovered metadata instance.
 
 ### Exercise 3. Accessing data members from a stored metadata object
 
-We can access the metadata members defined in each class (you may check the corresponding members by exploring the header file or [doxygen class documentation](https://sultan.unizar.es/rest/classes.html) (recommended), or by invoking `Dump()` for a given metadata instance. For example, the [TRestRawVetoAnalysisProcess](https://sultan.unizar.es/rest/classTRestRawVetoAnalysisProcess.html), contains a metadata member named `fThreshold`, which was used during the data processing.
+We can access the metadata members defined in each class (you may check the corresponding members by exploring the header file or [doxygen class documentation](https://sultan.unizar.es/rest/classes.html) (recommended), or by invoking `Dump()` for a given metadata instance. For example, the [TRestRawVetoAnalysisProcess](https://sultan.unizar.es/rest/classTRestRawVetoAnalysisProcess.html) contains a metadata member named `fThreshold` which was used during the data processing.
 
-We can recover the value using:
+We can recover the value using the name `veto` given by the user at the RML:
 
-```
+```python
 rn.GetMetadataMember("veto::fThreshold")
 ```
 
 or
 
-```
+```python
 rn.GetMetadataMember("TRestRawVetoAnalysisProcess::fThreshold")
 ```
 
 where the latest command will return the value of the first metadata instance that is of type `TRestRawVetoAnalysisProcess`. In our example there is only one instance, thus any of both ways will produce the same result.
 
-The returned value will always be an string, and conversion to a numeric value might be necessary
+The returned value will always be a string, and conversion to a numeric value might be necessary
 
-```
+```python
 threshold = int( rn.GetMetadataMember("TRestRawVetoAnalysisProcess::fThreshold") )
 ```
 
@@ -95,7 +95,7 @@ Using the instance of TRestRun, `rn`, we can gain access to the analysis tree. T
 
 For example, we could use the analysis tree to generate a histogram and draw the observable named `sAna_ThresholdIntegral`. In python this can be done as follows:
 
-```
+```python
 c = ROOT.TCanvas
 histo1 = ROOT.TH1F(‘histo1’,‘histo1’ ,1000 ,0 ,500000)
 rn.GetAnalysisTree().Project("histo1", "bb" )
@@ -231,8 +231,7 @@ A last way to access the information inside a REST-for-Physics generated file is
 When opening the file, a list of the instances created will shown on screen.
 
 ```
-jgalan@sultan2:~/git/rest-school/data$ restRoot R11568_00001_RawToTrack_Calibration_3hr_jgalan_2.3.15.root 
-Warning in <UnknownClass::SetDisplay>: DISPLAY not set, setting it to 192.168.1.2:0.0
+$ restRoot R11568_00001_RawToTrack_Calibration_3hr_jgalan_2.3.15.root 
 = Loading libraries ...
  - /home/jgalan/rest-framework/install/lib/libRestDetector.so
  - /home/jgalan/rest-framework/install/lib/libRestFramework.so
@@ -242,10 +241,6 @@ Warning in <UnknownClass::SetDisplay>: DISPLAY not set, setting it to 192.168.1.
  - /home/jgalan/rest-framework/install/lib/libRestAxion.so
 
 Attaching file R11568_00001_RawToTrack_Calibration_3hr_jgalan_2.3.15.root as run0...
-MediumMagboltz::LoadGasFile:
-    Reading file /tmp/restGasFile_jgalan.gas.
-    Version 12.
-    Gas composition set to Ne/Xe/iC4H10 (48.85/48.85/2.3).
 Attaching event TRestTrackEvent as ev0...
 Attaching ana_tree0...
 Attaching ev_tree0...
