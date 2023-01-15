@@ -89,22 +89,25 @@ threshold = int( rn.GetMetadataMember("TRestRawVetoAnalysisProcess::fThreshold")
 
 ### Exercise 4. Accessing the analysis tree from TRestRun
 
-Using the instance of TRestRun, `rn`, we can gain access to the analysis tree. The analysis tree contains all the observables added during the processing of the data, and it can be operated as a standard ROOT TTree object. Important to read the [ROOT TTree documentation!](https://root.cern.ch/root/htmldoc/guides/users-guide/Trees.html).
+Using the instance of TRestRun, `rn`, we can gain access to the analysis tree. The analysis tree contains all the observables added during the processing of the data for each event, and it can be operated as a standard ROOT TTree object. Important to read the [ROOT TTree documentation!](https://root.cern.ch/root/htmldoc/guides/users-guide/Trees.html).
 
-Drawing an observable named `sAna_ThresholdIntegral` could be achieved by simply executing:
+For example, we could use the analysis tree to generate a histogram and draw the observable named `sAna_ThresholdIntegral`. In python this can be done as follows:
 
 ```
-rn.GetAnalysisTree()->Draw("sAna_ThresholdIntegral>>ThIntegral(1000,0,500000)");
+c = ROOT.TCanvas
+histo1 = ROOT.TH1F(‘histo1’,‘histo1’ ,1000 ,0 ,500000)
+rn.GetAnalysisTree().Project("histo1", "bb" )
+histo1.GetEntries()
+histo1.Draw()
 ```
 
-In a similar way as it was done when we compiled a `TRestDataSet`, but this time only for the active run which we opened at the beginning of this tutorial.
+This is similar as when we accessed the TTree compiled with a set of files using `TRestDataSet`, but this time we only access the data of a single run, the run which we opened at the beginning of this tutorial.
 
+### Exercise 5. Accessing different event entries inside the event
 
-### Accessing the data stored at a specific event entry
+From the *rn* instance we may also get access to the event data and the analysis tree data in a coherent way. We just get access to those objects using the `TRestRun` methods. Then, we may get any entry number found inside the file. Note that the entry number is just the position of the entry within the file, but it does not serve to fully identify the event. The event ID, which might take any integer value, is unique, and it can be used all along the life of the data processing to identify the origin of the event.
 
-From the *rn* instance we may also get access to the event data and the analysis tree data. We just get the pointers to those objects using the `TRestRun` methods. Then, we may get any entry number found inside the file. Note that the entry number is just the position of the entry within the file, but it does not serve to fully identify the event. The event ID, which might take any integer value, is unique, and it can be used to identify an event between different files.
-
-When we request an entry or event id to the `TRestRun` instance, the event pointer, named here *g4Ev*, and the analysis tree pointer, named here *aT*, will change their memory address to point to the location of the event entry we specified using the `TRestRun` methods: `GetEntry(N)`, `GetNextEntry()` or `GetEventWithID(id)`.
+When we request an entry or event id to the `TRestRun` instance, the event pointer, named here *ev*, and the analysis tree pointer, named here *aT*, will change their memory address to point to the location of the event entry we specified using the `TRestRun` methods: `GetEntry(N)`, `GetNextEntry()` or `GetEventWithID(id)`.
 
 In this example we print the event data and analysis tree observables from 3 different event entries.
 ```python
@@ -133,6 +136,7 @@ aT.PrintObservables()
 Note that in order to register the event data inside our analysis file it is necesary to enable the parameter `outputEventStorage`. If this parameter is not specified, its default will be normally `on`.
 
 ### Iterating over the events inside a REST file
+
 Obviously, once we got an instance of the run `rn` we may iterate over all the events to get specific information and perform a dedicated analysis using the event or analysis tree methods. Each time we call the `TRestRun::GetEntry` method, the `aT` and `g4Ev` objects linked to the run will be updated with the new event and analysis information for that event entry.
 
 ```python
@@ -148,7 +152,7 @@ for n in range(nEntries):
 
 To access specific events, check the available methods for each event type. For example, for geant4 event we will be willing to access a [TRestGeant4Event](https://sultan.unizar.es/rest/classTRestGeant4Event.html) and the tracks stored inside, encapsulated inside a [TRestGeant4Track](https://sultan.unizar.es/rest/classTRestGeant4Track.html).
 
-### Collecting specific observable values
+### Exercise X. Retrieving specific observable values
 
 Once we get access to the analysis tree in an iterative way we may recover the value of any of the observables inside the tree and do any calculation we are willing to, create a custom histogram, draw them, print their value, etc.
 
@@ -159,5 +163,9 @@ for n in range(nEntries):
 	obsValue = aT.GetDblObservableValue("g4Ana_totalEdep")
 	print("g4Ana_totaleEdep: " + str(obsValue) + " keV" )
 ```
+
+### Exercise X. Drawing and updating the event visualized
+
+### Exercise X. Getting event entries that satisfy certain conditions
 
 ### Exercise X. Quick access to the file information using restRoot
