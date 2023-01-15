@@ -89,7 +89,7 @@ threshold = int( rn.GetMetadataMember("TRestRawVetoAnalysisProcess::fThreshold")
 
 ### Exercise 4. Accessing the analysis tree from TRestRun
 
-Using the instance of TRestRun, `rn`, we can gain access to the analysis tree. The analysis tree contains all the observables added during the processing of the data for each event, and it can be operated as a standard ROOT TTree object. Important to read the [ROOT TTree documentation!](https://root.cern.ch/root/htmldoc/guides/users-guide/Trees.html).
+Using the instance of TRestRun, `rn`, we can gain access to the analysis tree. The analysis tree contains all the observables added during the processing of the data for each event, and it can be operated as a standard ROOT `TTree` object. Important to read the [ROOT TTree documentation!](https://root.cern.ch/root/htmldoc/guides/users-guide/Trees.html).
 
 For example, we could use the analysis tree to generate a histogram and draw the observable named `sAna_ThresholdIntegral`. In python this can be done as follows:
 
@@ -101,37 +101,56 @@ histo1.GetEntries()
 histo1.Draw()
 ```
 
-This is similar as when we accessed the TTree compiled with a set of files using `TRestDataSet`, but this time we only access the data of a single run, the run which we opened at the beginning of this tutorial.
+This is similar as when we accessed the `TTree` compiled with a set of files using `TRestDataSet`, but this time we only access the data of a single run, the run which we opened at the beginning of this tutorial.
 
 ### Exercise 5. Accessing different event entries inside the event
 
-From the *rn* instance we may also get access to the event data and the analysis tree data in a coherent way. We just get access to those objects using the `TRestRun` methods. Then, we may get any entry number found inside the file. Note that the entry number is just the position of the entry within the file, but it does not serve to fully identify the event. The event ID, which might take any integer value, is unique, and it can be used all along the life of the data processing to identify the origin of the event.
+From the *rn* instance we may also get access to the event data and the analysis tree data in a coherent way. We can get access to those objects using the `TRestRun` methods. When we request an entry or event id to the `TRestRun` instance, the event pointer, named here *tckEv*, and the analysis tree pointer, named here *aT*, will change their memory address to point to the location of the event entry we specified using one of the following `TRestRun` methods: `GetEntry(N)`, `GetNextEntry()` or `GetEventWithID(id)`.
 
-When we request an entry or event id to the `TRestRun` instance, the event pointer, named here *ev*, and the analysis tree pointer, named here *aT*, will change their memory address to point to the location of the event entry we specified using the `TRestRun` methods: `GetEntry(N)`, `GetNextEntry()` or `GetEventWithID(id)`.
+Then, we may get any entry number found inside the file. In this example we print the event data and analysis tree observables from 3 different event entries.
 
-In this example we print the event data and analysis tree observables from 3 different event entries.
 ```python
-# We retrieve the event pointer
-g4Ev = rn.GetInputEvent()
-
-# We retrieve the analysisTree pointer
+tckEv = rn.GetInputEvent()
 aT = rn.GetAnalysisTree()
 
-# There are in total 9421 entries. We get an arbitrary entry in between
-rn.GetEntry(1213)
-g4Ev.PrintEvent()
+rn.GetEntry(10)
+tckEv.GetID()
+tckEv.PrintEvent()
 aT.PrintObservables()
 
-# We get the next entry. It should be entry 1214.
+# We get the next entry. It should be entry 11.
 rn.GetNextEntry()
-g4Ev.PrintEvent()
+tckEv.GetID()
+tckEv.PrintEvent()
 aT.PrintObservables()
 
-# We get the event with id 1858. Probably does not correspond with entry 1858
-rn.GetEventWithID(1858)
-g4Ev.PrintEvent()
+# We get the event with id 6960 which we are certain exists inside the file
+rn.GetEventWithID(6960)
+tckEv.GetID()
+tckEv.PrintEvent()
 aT.PrintObservables()
 ```
+
+**NOTE:** The event entry number is just the position of the entry within the file, but it does not serve to fully identify the event between different processing stages with different output files. The event ID in the other hand is unique, and it can be used all along the life of the data processing to identify the origin of the event.
+
+### Exercise 5. Drawing events
+
+In the same way as we print the event data information and the observable values of each event, we may visualize the event invoking the method `DrawEvent` available in any class inheriting from `TRestEvent`.
+
+As we did previously, we need to pre-load the entry we wish to visualize, and have created a `TCanvas` window instance previously.
+
+```
+c = ROOT.TCanvas
+rn.GetEntry(100)
+tckEv.DrawEvent()
+```
+
+The `DrawEvent` method might receive an optional argument that allows to control what information we want to visualize from the event data. See for example the [TRestGeant4Event::DrawEvent](https://sultan.unizar.es/rest/classTRestGeant4Event.html#acbfe704537c529ce05fa101719d34b56) or the [TRestRawSignalEvent::DrawEvent](https://sultan.unizar.es/rest/classTRestRawSignalEvent.html#a5445f401b350b1d952670a7323594f6d) documentation.
+
+### Exercise 6. Accessing event types other than the last 
+First we need to create an event holder and tell the run instance which type of event we want to read.
+
+**NOTE**: If we have processed the file using `inputEventStorage=True` we will be able to access any event type present in the complete event data processing chain. In the following example we will access different event types stored in the file.
 
 Note that in order to register the event data inside our analysis file it is necesary to enable the parameter `outputEventStorage`. If this parameter is not specified, its default will be normally `on`.
 
@@ -163,8 +182,6 @@ for n in range(nEntries):
 	obsValue = aT.GetDblObservableValue("g4Ana_totalEdep")
 	print("g4Ana_totaleEdep: " + str(obsValue) + " keV" )
 ```
-
-### Exercise X. Drawing and updating the event visualized
 
 ### Exercise X. Getting event entries that satisfy certain conditions
 
