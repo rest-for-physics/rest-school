@@ -6,7 +6,7 @@ The units inside REST-for-Physics are available in the namespace `REST_Units`, a
 
 Inside a `restRoot` session we can use the namespace to identify which public data members and methods are available to us. Now, just open a new `restRoot` session and checkout what it is inside the namespace.
 
-```
+```bash
 restRoot
 root [0] REST_Units:: [TAB]
 ```
@@ -15,7 +15,7 @@ In particular, you will be able to identify few of the REST basic units defined 
 
 You may check now the scaling value associated to each unit.
 
-```
+```c++
 root [0] REST_Units::degrees [ENTER]
 (const double) 57.295780
 ```
