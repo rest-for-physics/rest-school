@@ -144,7 +144,7 @@ root [13] GenerateHistogram( "../../data/XenonNeon_25Pct_1bar.N150f" );
 If the macro execution succeeds, you should have a new png image showing the resulting histogram.
 
 
-### Exercise 3. TRestAnalysisPlot
+### Exercise 4. TRestAnalysisPlot
 
 In this exercise we will launch restManager to produce a combined plot using the `TRestAnalysisPlot` metadata class. This class allows to define plots through a configuration file so that we can produce the same systematic plots for different datasets.
 
@@ -199,7 +199,7 @@ Additionally you may update the title and labels to match what we are drawing "O
 
 You can also add a new plot, just copy/paste a complete `<plot>` entry and modify it as you did in the previous section. The only difference now is that you need to allocate an additional space inside the `<canvas` entry to define a grid that can host at least 5 plots, such as 3x2 or 2x3. The canvas size should be also updated according to the new number of plots to keep the aspect ratio.
 
-### Exercise 4. TRestMetadataPlot
+### Exercise 5. TRestMetadataPlot
 
 In this exercise we will launch restManager to produce a combined plot using `TRestMetadataPlot`. In a similar way to `TRestAnalysisPlot`, this class will allow to generate systematic plots, this time using the values of the metadata members found in a set of input files. Thus, different metadata members can be plotted against the other metadata members, just as the run number or the run timestamp, as we will see in the following example.
 
@@ -212,7 +212,7 @@ mkdir plots
 restManager --c metadataPlot.rml --f "../../data/*RawToTrack*root"
 ```
 
-### Exercise 5. TRestDataSet
+### Exercise 6. TRestDataSet
 
 A `TRestDataSet` instance will allow us to define certain conditions that need to be satisfied by a group of REST processed files. Once the object has been initialized it will give us access to an internal `TTree` and a `RDataFrame` instances built with the selected files. 
 
