@@ -93,7 +93,7 @@ root [11] TRestTools::GetFileNameRoot("../../data/XenonNeon_25Pct_1bar.N150f")
 
 Now, we can create a ROOT macro, that uses those methods to fill a TH1D object with the sums from each row. Open a new file and test the following code:
 
-```
+```c++
 Int_t GenerateHistogram( std::string fname ) {
 
     /// Reading the table
