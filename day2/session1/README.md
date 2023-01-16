@@ -6,7 +6,7 @@ The units inside REST-for-Physics are available in the namespace `REST_Units`, a
 
 Inside a `restRoot` session we can use the namespace to identify which public data members and methods are available to us. Now, just open a new `restRoot` session and checkout what it is inside the namespace.
 
-```bash
+```c++
 restRoot
 root [0] REST_Units:: [TAB]
 ```
@@ -24,21 +24,21 @@ Where the returned value corresponds to the degrees in one radian. The units ins
 
 For example, if we execute,
 
-```
+```c++
 root [1] 1. * units("cm")
 (double) 0.10000000
 ```
 
 the result will be the number of `cm` inside 1 `mm` which is the default unit inside REST. We can also combine different units to achieve more complex results, such as:
 
-```
+```c++
 root [2] 1. * units("g/cm^3")
 (double) 1000000.0
 ```
 
 If we know the value the units for the value we are providing, and this is not given in the default units, we will then need to write a more generic expression:
 
-```
+```c++
 root [3] 180. * units("rads")/units("degrees")
 (double) 3.1415927
 ```
@@ -51,7 +51,7 @@ In the same way as units, REST-for-Physics provides access to its own physics co
 
 In this exercise, we will just check inside the `REST_Physics` namespace to see the available constants and print out their value.
 
-```
+```c++
 root [4] REST_Physics:: [TAB]
 
 root [5] REST_Physics::lightSpeed
@@ -66,27 +66,27 @@ Some of the methods found in TRestTools will allow us to operate with tables. Th
 
 We can read this table into a `std::vector <std::vector> >` previously generated data holder as follows:
 
-```
+```c++
 root [6] std::vector <std::vector <float> > d;
 root [7] TRestTools::ReadBinaryTable( "../../data/XenonNeon_25Pct_1bar.N150f", d )
 ```
 
 Then, we may access this table using the standard c++ libraries. To print on screen one element we may use:
 
-```
+```c++
 root [8] d[10][10];
 ```
 
 or to print the full table or show several rows on screen, we can do:
 
-```
+```c++
 root [9] TRestTools::PrintTable ( d );
 root [10] TRestTools::PrintTable ( d, 10, 11 );
 ```
 
 Other interesting methods inside `TRestTools` allow us to operate with filenames, such as substracting the filename from a full path, extracting the extension, or checking if the file exists or is accessible. For example:
 
-```
+```c++
 root [11] TRestTools::GetFileNameRoot("../../data/XenonNeon_25Pct_1bar.N150f")
 (std::string) "XenonNeon_25Pct_1bar"
 ```
@@ -136,7 +136,7 @@ Where in the above code we have used the fact that the data is a response matrix
 
 We can execute the macro inside the `restRoot` session by loading the generated file, and executing the method:
 
-```
+```c++
 root [12] .L GenerateHistogram.C
 root [13] GenerateHistogram( "../../data/XenonNeon_25Pct_1bar.N150f" );
 ```
@@ -152,7 +152,7 @@ In this exercise we will launch restManager to produce a combined plot using the
 
 We just provide the definition inside the rml config file. All the input files that satisfy the glob pattern will be combined.
 
-```
+```c++
 restManager --c analysisPlot.rml --f "../../data/run_*rayTracing*root"
 ```
 
@@ -163,7 +163,7 @@ To see the effect of output levels you may try to launch now `restManager` with 
 
 You may use:
 
-```
+```c++
 restManager --v 2 --c analysisPlot.rml --f "../../data/run_*rayTracing*root"
 ```
 
@@ -175,7 +175,7 @@ At the `<globals>` section inside the RML file we have defined a variable named 
 
 You may try to generate an output using the different formats supported by ROOT (e.g. pdf, C, root. jpeg). Try to generate a different image format, and 
 
-```
+```c++
 export FORMAT=pdf
 restManager --c axionPhysicsPlot.rml --f "../../data/run_*rayTracing*root"
 ```
@@ -207,7 +207,7 @@ We provide the plot definitions inside the `metadataPlot.rml` config file. We wi
 
 Now just try the following command to test the plot production. The first time we will need to create a directory `plots` where the plots will be created.
 
-```
+```c++
 mkdir plots
 restManager --c metadataPlot.rml --f "../../data/*RawToTrack*root"
 ```
@@ -220,32 +220,32 @@ Inside the `dataset.rml` file you will find different dataset definitions that c
 
 In this example we will initialize that particular dataset and access the `RDataFrame` and `TTree` defined inside `TRestDataSet`.
 
-```
+```c++
 root [0] TRestDataSet calJune("dataset.rml", "CalibrationsJune");
 root [1] calJune.Initialize()
 ```
 
 We can verify now which files have been finally selected by the dataset definition,
 
-```
+```c++
 root [2] calJune.GetFileSelection()
 ```
 
 and we can access the combined `TTree` as we do with any other `TTree`. For example we can check the number of entries inside the tree,
 
-```
+```c++
 root [3] calJune.GetTree()->GetEntries()
 ```
 
 or check the column names (branches) that have been added to the dataset (the ones that we have chosen inside the RML).
 
-```
+```c++
 root [4] calJune.GetDataFrame.GetColumnNames()
 ```
 
 We can create a histogram from the combined data and draw it on a canvas, using the `TTree` instance,
 
-```
+```c++
 root [5] TCanvas c1;
 root [6] calJune.GetTree()->Draw("sAna_ThresholdIntegral>>myHisto1(1000,0,500000)");
 root [7] myHisto1->GetEntries()
@@ -255,7 +255,7 @@ root [8] c1.Print("myHisto.png");
 
 or using the `RDataFrame` instance,
 
-```
+```c++
 root [9] TCanvas c2;
 root [10] auto myHisto2 = calJune.GetDataFrame().Histo1D("sAna_NumberOfGoodSignals")
 root [11] myHisto2->Draw();
@@ -266,20 +266,20 @@ Now we can operate with those objects to perform a more sophisticated analysis i
 
 Another interesting feature of `TRestDataSet` is the capability to export the analysis tree entries, and other relevant information, into different output formats so that the next access to the dataset we do not need to compute the file selection. Currently we support the ROOT output format which will dump to disk a `TRestDataSet` describing the parameters used for file selection, and a ROOT `TTree`, and a ASCII plain-text format which could be useful to import in other software packages.
 
-```
+```c++
 root [13] calJune.Export("JuneCalibrations.txt")
 root [14] calJune.Export("JuneCalibrations.root")
 ```
 
 You may now check the file contents inside the TXT file,
 
-```
+```c++
 head -n 25 JuneCalibrations.txt 
 ```
 
 or inside the exported ROOT file.
 
-```
+```c++
 root [0] TFile *f = TFile::Open("JuneCalibrations.root");
 root [2] TTree *tr = f->Get("AnalysisTree");
 root [3] TTree *tr = (TTree *) f->Get("AnalysisTree");
