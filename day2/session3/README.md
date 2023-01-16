@@ -194,7 +194,7 @@ for n in range(nEntries):
 
 Although we can also retrieve directly some basic calculations using some of the methods existing inside the `TRestAnalysisTree`. Such as the average or the RMS.
 
-```
+```python
 energyRatioAverage = rn.GetAnalysisTree().GetObservableAverage("sAna_AmplitudeIntegralRatio")
 ```
 
@@ -206,7 +206,7 @@ Suppose then than we want to differentiate those events that have a `sAna_Amplit
 
 We can open the **background** file and request the event entries that satisfy those conditions.
 
-```
+```python
 rn = ROOT.TRestRun("../../data/R11567_00001_RawToTrack_Background_21hr_jgalan_2.3.15.root")
 evList = rn.GetEventEntriesWithConditions("sAna_AmplitudeIntegralRatio>70 && sAna_AmplitudeIntegralRatio<75")
 print( evList )
@@ -215,7 +215,7 @@ rn.GetEntry(118)
 
 or
 
-```
+```python
 rn = ROOT.TRestRun("../../data/R11567_00001_RawToTrack_Background_21hr_jgalan_2.3.15.root")
 evList = rn.GetEventIdsWithConditions("sAna_AmplitudeIntegralRatio>70 && sAna_AmplitudeIntegralRatio<75 && hitsAna_xMean > 0 && hitsAna_yMean > 0")
 print( evList )
