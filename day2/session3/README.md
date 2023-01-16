@@ -143,7 +143,7 @@ In the same way as we print the event data information and the observable values
 
 As we did previously, we need to pre-load the entry we wish to visualize, and have created a `TCanvas` window instance previously.
 
-```
+```python
 c = ROOT.TCanvas
 rn.GetEntry(100)
 tckEv.DrawEvent()
