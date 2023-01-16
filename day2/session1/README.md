@@ -55,27 +55,27 @@ Some of the methods found in TRestTools will allow us to operate with tables. Th
 We can read this table into a `std::vector <std::vector> >` previously generated data holder as follows:
 
 ```
-root root [4] std::vector <std::vector <float> > d;
-root root [5] TRestTools::ReadBinaryTable( "../../data/XenonNeon_25Pct_1bar.N150f", d )
+root [4] std::vector <std::vector <float> > d;
+root [5] TRestTools::ReadBinaryTable( "../../data/XenonNeon_25Pct_1bar.N150f", d )
 ```
 
 Then, we may access this table using the standard c++ libraries. To print on screen one element we may use:
 
 ```
-root root [6] d[10][10];
+root [6] d[10][10];
 ```
 
 or to print the full table or show several rows on screen, we can do:
 
 ```
-root root [7] TRestTools::PrintTable ( d );
-root root [8] TRestTools::PrintTable ( d, 10, 11 );
+root [7] TRestTools::PrintTable ( d );
+root [8] TRestTools::PrintTable ( d, 10, 11 );
 ```
 
 Other interesting methods inside `TRestTools` allow us to operate with filenames, such as substracting the filename from a full path, extracting the extension, or checking if the file exists or is accessible. For example:
 
 ```
-root root [9] TRestTools::GetFileNameRoot("../../data/XenonNeon_25Pct_1bar.N150f")
+root [9] TRestTools::GetFileNameRoot("../../data/XenonNeon_25Pct_1bar.N150f")
 (std::string) "XenonNeon_25Pct_1bar"
 ```
 
@@ -256,7 +256,7 @@ Another interesting feature of `TRestDataSet` is the capability to export the an
 
 ```
 root [13] calJune.Export("JuneCalibrations.txt")
-root root [14] calJune.Export("JuneCalibrations.root")
+root [14] calJune.Export("JuneCalibrations.root")
 ```
 
 You may now check the file contents inside the TXT file,
