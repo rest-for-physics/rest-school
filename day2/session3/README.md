@@ -1,14 +1,14 @@
 You will need to move to the directory `day2/session3` to match the proposed commands with the relative paths given in the examples.
 
-As you learnt during the corresponding lecture, we can use the REST-for-Physics libraries in different environments, including the `restRoot` ROOT based interactive shell, `C-macros` executed by the ROOT interface interpreter, C++ compiled executables, or `python3` scripts.
+As you have learnt during the corresponding session lecture, we can use the REST-for-Physics libraries in different environments, including the `restRoot` ROOT based interactive shell, `C-macros` executed by the ROOT interface interpreter, C++ compiled executables, or `python3` scripts.
 
-In this session we will learn how to access REST-for-Physics generated files using `python3`, although the use of this commands (or lines of code), can be used in a similar way in all the previous environments mentioned.
+In this session we will learn how to access REST-for-Physics generated files using `python3`, although the use of these commands (or lines of code), can be used in a similar way in all the previous environments mentioned.
 
 ### Required python headers
 
 When we write our python script we need to import the ROOT libraries, and any REST library we used to generate or process our files. This is done automatically by the `import REST` command inside python.
 
-In order to use REST libraries in python it is enough to import both ROOT and REST libraries using the `import` python command:
+In order to use REST libraries in python the best option is to import both ROOT and REST libraries using the `import` python command:
 
 ```python
 #!/usr/bin/python3
@@ -21,7 +21,7 @@ During the exercises you may chose to write the commands inside a file and execu
 
 ### Exercise 1. Opening a ROOT file processed with REST
 
-The first main class we need to know in REST is [TRestRun](https://sultan.unizar.es/rest/classTRestRun.html). TRestRun defines few helper methods that centralize the access to the event data, the analysis tree and the metadata objects stored inside the file. `TRestRun` can be used to open a ROOT file generated with REST, and access the data in a coherent way.
+The main class for event I/O and metadata access in REST is [TRestRun](https://sultan.unizar.es/rest/classTRestRun.html). TRestRun defines few helper methods that centralize the access to the event data, the analysis tree and the metadata objects stored inside the file. `TRestRun` can be used to open a ROOT file generated with REST, and access the data in a coherent way.
 
 The following example shows how to create a `TRestRun` instance , named *rn* in this script, print the run metadata information, and get the number of event entries stored inside the file.
 
@@ -65,7 +65,7 @@ We may now use any method defined at the recovered metadata instance.
 
 ### Exercise 3. Accessing data members from a stored metadata object
 
-We can access the metadata members defined in each class (you may check the corresponding members by exploring the header file or [doxygen class documentation](https://sultan.unizar.es/rest/classes.html) (recommended), or by invoking `Dump()` for a given metadata instance. For example, the [TRestRawVetoAnalysisProcess](https://sultan.unizar.es/rest/classTRestRawVetoAnalysisProcess.html) contains a metadata member named `fThreshold` which was used during the data processing.
+We can access the metadata members defined in each class (you may check the corresponding members by exploring the header file, the [class documentation](https://sultan.unizar.es/rest/classes.html) (recommended), or by invoking `Dump()` for a given metadata instance. For example, the [TRestRawVetoAnalysisProcess](https://sultan.unizar.es/rest/classTRestRawVetoAnalysisProcess.html) contains a metadata member named `fThreshold` which was used during the data processing.
 
 We can recover the value using the name `veto` given by the user at the RML:
 
@@ -73,7 +73,7 @@ We can recover the value using the name `veto` given by the user at the RML:
 rn.GetMetadataMember("veto::fThreshold")
 ```
 
-or
+or we can recover it using the class name of the process
 
 ```python
 rn.GetMetadataMember("TRestRawVetoAnalysisProcess::fThreshold")
@@ -87,18 +87,18 @@ The returned value will always be a string, and conversion to a numeric value mi
 threshold = int( rn.GetMetadataMember("TRestRawVetoAnalysisProcess::fThreshold") )
 ```
 
-**HINT:** Any metadata information is printed out inside the method `PrintMetadata` of each metadata class. In order to find out where the information printed out is stored inside the class it is a good idea to check the implementation of the method for the class we are interested in.
+**HINT:** Any metadata information is printed out inside the method `PrintMetadata` of each metadata class. In order to find out which relevant metadata members we can access inside the class it is a good idea to check the implementation of the method for the class we are interested in.
 
 ### Exercise 4. Accessing the analysis tree from TRestRun
 
-Using the instance of TRestRun, `rn`, we can gain access to the analysis tree. The analysis tree contains all the observables added during the processing of the data for each event, and it can be operated as a standard ROOT `TTree` object. Important to read the [ROOT TTree documentation!](https://root.cern.ch/root/htmldoc/guides/users-guide/Trees.html).
+Using the instance of TRestRun, *rn*, we can gain access to the analysis tree. The analysis tree contains all the observables added during the processing of the data for each event, and it can be operated as a standard ROOT `TTree` object. Important to read the [ROOT TTree documentation!](https://root.cern.ch/root/htmldoc/guides/users-guide/Trees.html).
 
 For example, we could use the analysis tree to generate a histogram and draw the observable named `sAna_ThresholdIntegral`. In python this can be done as follows:
 
 ```python
 c = ROOT.TCanvas
 histo1 = ROOT.TH1F(‘histo1’,‘histo1’ ,1000 ,0 ,500000)
-rn.GetAnalysisTree().Project("histo1", "bb" )
+rn.GetAnalysisTree().Project("histo1", "sAna_ThresholdIntegral" )
 histo1.GetEntries()
 histo1.Draw()
 ```
@@ -164,7 +164,7 @@ Note that in order to register the event data inside our analysis file it is nec
 
 ### Exercise 6. Iterating over the events inside a REST file
 
-Obviously, once we got an instance of the run `rn` we may iterate over all the events to get specific information and perform a dedicated analysis using the event or analysis tree methods. Each time we call the `TRestRun::GetEntry` method, the `aT` and `g4Ev` objects linked to the run will be updated with the new event and analysis information for that event entry.
+Obviously, once we got an instance of the run *rn* we may iterate over all the events to get specific information and perform a dedicated analysis using the event or analysis tree methods. Each time we call the `TRestRun::GetEntry` method, the `aT` and `g4Ev` objects linked to the run will be updated with the new event and analysis information for that event entry.
 
 ```python
 nEntries =  rn.GetEntries()
@@ -202,9 +202,9 @@ energyRatioAverage = rn.GetAnalysisTree().GetObservableAverage("sAna_AmplitudeIn
 
 We have been working with a calibration file which registers reference events in our detector, such as X-rays produced by a radiactive source. Imagine that now we want to select background events that have properties similar to the properties from our reference calibration file.
 
-Suppose then than we want to differentiate those events that have a `sAna_AmplitudeIntegralRatio` close to the average value obtained in the previous exercise (=72.87), and that we want the events happening in a given area of the detector, lets say those that produced a hit on the first quadrant where `x>0` and `y>0`.
+Suppose then than we want to differentiate those events that have a `sAna_AmplitudeIntegralRatio` close to the average value obtained in the previous exercise (=72.87), and that we want the events happening in a given area of the detector, lets say those that produced an energy deposit on the first quadrant, where `x>0` and `y>0`.
 
-We can open the *background* file and request the event entries that satisfy those conditions.
+We can open the **background** file and request the event entries that satisfy those conditions.
 
 ```
 rn = ROOT.TRestRun("../../data/R11567_00001_RawToTrack_Background_21hr_jgalan_2.3.15.root")
@@ -219,14 +219,14 @@ or
 rn = ROOT.TRestRun("../../data/R11567_00001_RawToTrack_Background_21hr_jgalan_2.3.15.root")
 evList = rn.GetEventIdsWithConditions("sAna_AmplitudeIntegralRatio>70 && sAna_AmplitudeIntegralRatio<75 && hitsAna_xMean > 0 && hitsAna_yMean > 0")
 print( evList )
-rn.GetEventWithID(118)
+rn.GetEventWithID(6811)
 ```
 
-Now we can print the event, draw it, or check its corresponding observable values.
+Now we can print the event, draw it, access the event data members or check its corresponding observable values.
 
 ### Exercise 9. Quick access to the file information using restRoot
 
-A last way to access the information inside a REST-for-Physics generated file is to provide it as an argument to the `restRoot` executable. In that case, the event pointer, the run object, the analysis tree, and the metadata objects present inside the file will be automatically instantiated.
+Another way to access the information inside a REST-for-Physics generated file is to provide it as an argument to the `restRoot` executable. In that case, the event pointer (ev0), the run object (run0), the analysis tree (ana_tree0), and the metadata objects (md0_) present inside the file will be automatically instantiated.
 
 When opening the file, a list of the instances created will shown on screen.
 
