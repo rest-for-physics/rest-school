@@ -45,8 +45,20 @@ root [3] 180. * units("rads")/units("degrees")
 
 REMEMBER: All these lines of code that you are using inside your `restRoot` session can be used inside a C++ compiled code, a C-macro, or even a python script that imports the REST-for-Physics libraries.
 
+### Exercise 2. TRestPhysics
 
-### Exercise 2. TRestTools
+In the same way as units, REST-for-Physics provides access to its own physics constant definitions and geometry methods commonly exploited in particle tracking.
+
+In this exercise, we will just check inside the `REST_Physics` namespace to see the available constants and print out their value.
+
+```
+root [4] REST_Physics:: [TAB]
+
+root [5] REST_Physics::lightSpeed
+(const double) 2.9979246e+08
+```
+
+### Exercise 3. TRestTools
 
 TRestTools is a class that defines static methods that can be invoked directly. It contains generic methods that can be of utility at some point in the process of building a new REST metadata class or process, or inside REST macros/scripts. The different methods can be found documented at root [the following page](https://sultan.unizar.es/rest/classTRestTools.html).
 
@@ -55,27 +67,27 @@ Some of the methods found in TRestTools will allow us to operate with tables. Th
 We can read this table into a `std::vector <std::vector> >` previously generated data holder as follows:
 
 ```
-root [4] std::vector <std::vector <float> > d;
-root [5] TRestTools::ReadBinaryTable( "../../data/XenonNeon_25Pct_1bar.N150f", d )
+root [6] std::vector <std::vector <float> > d;
+root [7] TRestTools::ReadBinaryTable( "../../data/XenonNeon_25Pct_1bar.N150f", d )
 ```
 
 Then, we may access this table using the standard c++ libraries. To print on screen one element we may use:
 
 ```
-root [6] d[10][10];
+root [8] d[10][10];
 ```
 
 or to print the full table or show several rows on screen, we can do:
 
 ```
-root [7] TRestTools::PrintTable ( d );
-root [8] TRestTools::PrintTable ( d, 10, 11 );
+root [9] TRestTools::PrintTable ( d );
+root [10] TRestTools::PrintTable ( d, 10, 11 );
 ```
 
 Other interesting methods inside `TRestTools` allow us to operate with filenames, such as substracting the filename from a full path, extracting the extension, or checking if the file exists or is accessible. For example:
 
 ```
-root [9] TRestTools::GetFileNameRoot("../../data/XenonNeon_25Pct_1bar.N150f")
+root [11] TRestTools::GetFileNameRoot("../../data/XenonNeon_25Pct_1bar.N150f")
 (std::string) "XenonNeon_25Pct_1bar"
 ```
 
@@ -125,8 +137,8 @@ Where in the above code we have used the fact that the data is a response matrix
 We can execute the macro inside the `restRoot` session by loading the generated file, and executing the method:
 
 ```
-root [10] .L GenerateHistogram.C
-root [11] GenerateHistogram( "../../data/XenonNeon_25Pct_1bar.N150f" );
+root [12] .L GenerateHistogram.C
+root [13] GenerateHistogram( "../../data/XenonNeon_25Pct_1bar.N150f" );
 ```
 
 If the macro execution succeeds, you should have a new png image showing the resulting histogram.
