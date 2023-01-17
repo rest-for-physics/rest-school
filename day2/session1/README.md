@@ -20,7 +20,7 @@ root [0] REST_Units::degrees [ENTER]
 (const double) 57.295780
 ```
 
-Where the returned value corresponds to the degrees in one radian. The units inside REST work in a way that we can access the scaling factor by invoking `units("UNIT_STRING")`, which will allow us to make unit conversions inside our code. 
+Where the returned value corresponds to the degrees in one radian. The units inside REST work in a way that we can access the scaling factor by invoking `units("UNIT_STRING")`, which will allow us to make unit conversions inside our code.
 
 For example, if we execute,
 
@@ -60,7 +60,7 @@ root [5] REST_Physics::lightSpeed
 
 ### Exercise 3. TRestTools
 
-TRestTools is a class that defines static methods that can be invoked directly. It contains generic methods that can be of utility at some point in the process of building a new REST metadata class or process, or inside REST macros/scripts. The different methods can be found documented at root [the following page](https://sultan.unizar.es/rest/classTRestTools.html).
+TRestTools is a class that defines static methods that can be invoked directly. It contains generic methods that can be of utility at some point in the process of building a new REST metadata class or process, or inside REST macros/scripts. The different methods can be found documented in [the following page](https://sultan.unizar.es/rest/classTRestTools.html).
 
 Some of the methods found in TRestTools will allow us to operate with tables. The `data` directory inside the root [rest-school repository](https://github.com/rest-for-physics/rest-school) contains a binary table with extension `N150f` indicating us that it is a table with 150 columns, and its values are written with `float` precision.
 
@@ -110,15 +110,15 @@ Int_t GenerateHistogram( std::string fname ) {
         float result = 0;
         for( const auto &elem : d )
             result += elem;
-    
+
         n++; // First bin is 1
 
 		/// We fill the histogram
         h->SetBinContent( n, result );
     }
-    
+
     std::string fnameRoot = TRestTools::GetFileNameRoot( fname );
-    
+
 	/// We must create the canvas where to draw before drawing!!
     TCanvas c;
 
@@ -153,7 +153,7 @@ In this exercise we will launch restManager to produce a combined plot using the
 We just provide the definition inside the rml config file. All the input files that satisfy the glob pattern will be combined.
 
 ```c++
-restManager --c analysisPlot.rml --f "../../data/run_*rayTracing*root"
+restManager --c analysisPlots.rml --f "../../data/run_*rayTracing*root"
 ```
 
 
@@ -164,20 +164,20 @@ To see the effect of output levels you may try to launch now `restManager` with 
 You may use:
 
 ```c++
-restManager --v 2 --c analysisPlot.rml --f "../../data/run_*rayTracing*root"
+restManager --v 2 --c analysisPlots.rml --f "../../data/run_*rayTracing*root"
 ```
 
 The `--v 2` flag is equal to `info` output level and it will override the verboseLevel given by the configuration file for each individual section or class definition.
 
 #### Modifying the RML behaviour using system variables
 
-At the `<globals>` section inside the RML file we have defined a variable named `FORMAT`. This variable it is used inside the configuration file but can be overwritten and modified externally using sytem enironment variables. This allows to control externally the behaviour of the RML (configuration file) and define templates with the most relevant parameters that need to be modified/controlled externally.
+In the `<globals>` section inside the RML file we have defined a variable named `FORMAT`. This variable is used inside the configuration file but can be overwritten and modified externally using sytem environment variables. This allows to control externally the behaviour of the RML (configuration file) and define templates with the most relevant parameters that need to be modified/controlled externally.
 
-You may try to generate an output using the different formats supported by ROOT (e.g. pdf, C, root. jpeg). Try to generate a different image format, and 
+You may try to generate an output using the different formats supported by ROOT (e.g. pdf, C, root, jpeg). Try to generate a different image format, and
 
 ```c++
 export FORMAT=pdf
-restManager --c axionPhysicsPlot.rml --f "../../data/run_*rayTracing*root"
+restManager --c analysisPlots.rml --f "../../data/run_*rayTracing*root"
 ```
 
 Hint: Open the RML file to inspect it and see how the `FORMAT` variable is used inside the RML file.
@@ -186,7 +186,7 @@ Hint: Open the RML file to inspect it and see how the `FORMAT` variable is used 
 
 We may now explore the different `<plot>` sections and decide to change one of the plots to draw something else.
 
-In this exercise you may decide to use *any* of the variables that are listed inside the `data/README.md` description at the root [rest-school repository](https:/github.com/rest-for-physics/rest-school/).
+In this exercise you may decide to use *any* of the variables that are listed inside the `data/README.md` description in the root [rest-school repository](https:/github.com/rest-for-physics/rest-school/).
 
 A possible proposal:
  - Replace the variables inside the plot named `FocalSpot` by the variables `offset_posX` and `offset_posY`.
@@ -214,9 +214,9 @@ restManager --c metadataPlot.rml --f "../../data/*RawToTrack*root"
 
 ### Exercise 6. TRestDataSet
 
-A `TRestDataSet` instance will allow us to define certain conditions that need to be satisfied by a group of REST processed files. Once the object has been initialized it will give us access to an internal `TTree` and a `RDataFrame` instances built with the selected files. 
+A `TRestDataSet` instance will allow us to define certain conditions that need to be satisfied by a group of REST processed files. Once the object has been initialized it will give us access to an internal `TTree` and `RDataFrame` instances built with the selected files.
 
-Inside the `dataset.rml` file you will find different dataset definitions that can be used to create a selection of files. For example, the dataset named `CalibrationsJune` will pick-up from the `RawTrack` files all those calibration runs that were measured in the month of June.
+Inside the `dataset.rml` file you will find different dataset definitions that can be used to create a selection of files. For example, the dataset named `CalibrationsJune` will pick-up from the `RawTrack` files all those calibration runs that were measured in June.
 
 In this example we will initialize that particular dataset and access the `RDataFrame` and `TTree` defined inside `TRestDataSet`.
 
@@ -274,14 +274,13 @@ root [14] calJune.Export("JuneCalibrations.root")
 You may now check the file contents inside the TXT file,
 
 ```c++
-head -n 25 JuneCalibrations.txt 
+head -n 25 JuneCalibrations.txt
 ```
 
 or inside the exported ROOT file.
 
 ```c++
 root [0] TFile *f = TFile::Open("JuneCalibrations.root");
-root [2] TTree *tr = f->Get("AnalysisTree");
 root [3] TTree *tr = (TTree *) f->Get("AnalysisTree");
 root [4] tr->GetEntries()
 (long long) 34782
