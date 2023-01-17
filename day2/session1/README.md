@@ -173,7 +173,7 @@ The `--v 2` flag is equal to `info` output level and it will override the verbos
 
 In the `<globals>` section inside the RML file we have defined a variable named `FORMAT`. This variable is used inside the configuration file but can be overwritten and modified externally using sytem environment variables. This allows to control externally the behaviour of the RML (configuration file) and define templates with the most relevant parameters that need to be modified/controlled externally.
 
-You may try to generate an output using the different formats supported by ROOT (e.g. pdf, C, root, jpeg). Try to generate a different image format, and
+You may try to generate an output using the different formats supported by ROOT (e.g. pdf, C, root, jpeg). Try to generate a different image format using the following code.
 
 ```c++
 export FORMAT=pdf
@@ -186,13 +186,13 @@ Hint: Open the RML file to inspect it and see how the `FORMAT` variable is used 
 
 We may now explore the different `<plot>` sections and decide to change one of the plots to draw something else.
 
-In this exercise you may decide to use *any* of the variables that are listed inside the `data/README.md` description in the root [rest-school repository](https:/github.com/rest-for-physics/rest-school/).
+In this exercise you may decide to use *any* of the variables that are listed inside the `data/README.md` description in the root [rest-school repository](https://github.com/rest-for-physics/rest-school).
 
 A possible proposal:
  - Replace the variables inside the plot named `FocalSpot` by the variables `offset_posX` and `offset_posY`.
  - Remove the variables inside the plot named `SolarDist` and replace by a single variable histogram `axionPhoton_fieldAverage`.
 
-Additionally you may update the title and labels to match what we are drawing "Offset" instead of "Spot" or "Field average root [T]". You may also play around with the histogram limits using the `range` field, or the binning number using the `nbins` field.
+Additionally you may update the title and labels to match what we are drawing "Offset" instead of "Spot" or "Field average [T]". You may also play around with the histogram limits using the `range` field, or the binning number using the `nbins` field.
 
 
 #### Adding new plots
@@ -240,7 +240,7 @@ root [3] calJune.GetTree()->GetEntries()
 or check the column names (branches) that have been added to the dataset (the ones that we have chosen inside the RML).
 
 ```c++
-root [4] calJune.GetDataFrame.GetColumnNames()
+root [4] calJune.GetDataFrame().GetColumnNames()
 ```
 
 We can create a histogram from the combined data and draw it on a canvas, using the `TTree` instance,
@@ -269,6 +269,7 @@ Another interesting feature of `TRestDataSet` is the capability to export the an
 ```c++
 root [13] calJune.Export("JuneCalibrations.txt")
 root [14] calJune.Export("JuneCalibrations.root")
+root [15] .q
 ```
 
 You may now check the file contents inside the TXT file,
@@ -280,6 +281,7 @@ head -n 25 JuneCalibrations.txt
 or inside the exported ROOT file.
 
 ```c++
+restRoot
 root [0] TFile *f = TFile::Open("JuneCalibrations.root");
 root [3] TTree *tr = (TTree *) f->Get("AnalysisTree");
 root [4] tr->GetEntries()
