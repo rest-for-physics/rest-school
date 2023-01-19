@@ -45,7 +45,7 @@ void Dummy::Print() const {
 
 We should remark now the 3 elements that identify the complete ROOT-ification of our class. The class is inheriting from `TObject`, and the class implements the `ClassImp(Dummy)` and `ClassDef(Dummy, 1)` that extends the class with additional methods that must be defined by any ROOT class.
 
-#### Exercise 2. Compiling your project
+### Exercise 2. Compiling your project
 
 In order to create our own compiled library and executable we will build a project using the `cmake` tool. `cmake` is an scripting language allowing to define compilation rules and create advanced configuration environment for setting up our project.
 
