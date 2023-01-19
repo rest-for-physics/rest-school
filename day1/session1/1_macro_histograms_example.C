@@ -12,7 +12,7 @@ int run_duration(){
 	int rate_threshold = 10; // rate threshold in counts per binw. If the rate is below, the detector is regarded to be inactive, and the bin is not counted towards the measurement time
 
     // Load dataframe
-    ROOT::RDataFrame data("AnalysisTree", "../data/R01855/R01855_0*root");
+    ROOT::RDataFrame data("AnalysisTree", "../../data/R01855/R01855_0*root");
         
     // extract timestamps from dataframe
 	auto result_ts = data.Take<double>("timeStamp");
