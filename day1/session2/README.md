@@ -18,16 +18,16 @@ class Dummy : public TObject {
    private:
       Float_t   fX = 0;         //< x position in centimeters
       Float_t   fY = 0;         //< y position in centimeters
-      Int_t     fTempValue = 0; //! temporary state value
+      Int_t     fTempValue = 10; //! temporary state value
    public:
       Dummy()             { fX = fY = -1; }
       void Print() const;
       void SetX(float x) { fX = x; }
       void SetY(float y) { fY = y; }
       void SetTempValue(int v) { fTempValue = v; }
-      Float_t GetX(float x) { fX = x; }
-      Float_t GetY(float y) { fY = y; }
-      Int_t GetTempValue(int v) { fTempValue = v; }
+      Float_t GetX(float x) { retunr fX; }
+      Float_t GetY(float y) { return fY; }
+      Int_t GetTempValue(int v) { return fTempValue; }
 
 ClassDef(Dummy, 1)
 };
@@ -66,7 +66,7 @@ Then we need to make sure that our project setup will check that the ROOT librar
 find_package(ROOT REQUIRED COMPONENTS Eve)
 ```
 
-The following line will add new paths were our project header files should be found. In our case we will just add the root directory since our simple project will just have one single header file at the projects root.
+The following line will add new paths where our project header files should be found. In our case we will just add the root directory since our simple project will just have one single header file at the projects root.
 
 ```
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
@@ -168,10 +168,11 @@ root [0] gSystem->Load("libDummy.so");
 root [1] Dummy dummy;
 root [2] dummy.SetX(TMath::Exp(1));
 root [3] dummy.SetY(TMath::Power(TMath::Pi()) )
-root [4] dummy.Print()
-root [5] TFile *f = TFile::Open("output_shell_V1.root");
-root [6] dummy.Write("SavedDummy")
-root [7] f->Close()
+root [4] dummy.SetTempValue( 137 )
+root [5] dummy.Print()
+root [6] TFile *f = TFile::Open("output_shell_V1.root");
+root [7] dummy.Write("SavedDummy")
+root [9] f->Close()
 ```
 
 ### Exercise 4. Adding an executable to your project.
@@ -197,6 +198,8 @@ int main()
     myClass.Print();
 
     myClass.SetX(25);
+    myClass.SetY(30);
+
     myClass.SetY(30);
 
     std::cout << "The class data members have been updated" << std::endl;
@@ -239,6 +242,8 @@ root [4] TFile *f2 = TFile::Open("output_shell_V1.root");
 root [5] Dummy *d2 = (Dummy *) f1->Get("SavedData");
 root [6] d2->Print();
 ```
+
+What is the value of the `fTempValue` recovered? Why?
 
 ### Exercise 6. Updating the data members and testing the ROOT automatic schema evolution
 
