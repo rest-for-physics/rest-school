@@ -35,12 +35,13 @@
             <variable name="magnetEntrance_posY" nbins="100"/>
             <cut variable="optics_efficiency" condition="&gt;0" value="ON"/>
         </plot>
+        <!--- Plot 3 -->
         <plot name="SolarDist" title="Solar disk distribution" xlabel="X [m]" ylabel="Y [m]" value="ON" stats="OFF" option="colz" marginTop="0.1">
             <variable name="initial_posX" nbins="100"/>
             <variable name="initial_posY" nbins="100"/>
             <cut variable="optics_efficiency" condition="&gt;0" value="ON"/>
         </plot>
-        <!--- Plot 3 -->
+        <!--- Plot 4 -->
         <plot name="FocalSpot" title="Spot at focal (all efficiencies)" xlabel="X [mm]" ylabel="Y [mm]" value="ON" stats="ON" option="colz" marginTop="0.1" weight="optics_efficiency*window_transmission*boreExitGate_transmission*axionPhoton_transmission*axionPhoton_probability">
             <variable name="final_posX" nbins="100"/>
             <variable name="final_posY" nbins="100"/>
