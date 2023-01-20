@@ -137,7 +137,7 @@ aT.PrintObservables()
 
 **HINT:** In the same way as `PrintMetadata` might help to understand where the information is stored inside the class data members, the `PrintEvent` method implementation of each specific event type might help to understand how the event information can be accessed directly.
 
-### Exercise 5. Drawing events
+### Exercise 6. Drawing events
 
 In the same way as we print the event data information and the observable values of each event, we may visualize the event invoking the method `DrawEvent` available in any class inheriting from `TRestEvent`.
 
@@ -151,7 +151,7 @@ tckEv.DrawEvent()
 
 The `DrawEvent` method might receive an optional argument that allows to control what information we want to visualize from the event data. See for example the [TRestGeant4Event::DrawEvent](https://sultan.unizar.es/rest/classTRestGeant4Event.html#acbfe704537c529ce05fa101719d34b56) or the [TRestRawSignalEvent::DrawEvent](https://sultan.unizar.es/rest/classTRestRawSignalEvent.html#a5445f401b350b1d952670a7323594f6d) documentation.
 
-### Exercise 6. Accessing event types other than the last output event
+### Exercise 7. Accessing event types other than the last output event
 
 If we have processed a file using `inputEventStorage=True` we will be able to access any event type present in the complete event data processing chain. The file `R11567_00001_RawToTrack_Background_21hr_jgalan_2.3.15.root` has been processed with that option enabled. We will use it during this exercise.
 
@@ -191,7 +191,7 @@ tckEv.PrintEvent()
 
 Try with the other event types!
 
-### Exercise 6. Iterating over the events inside a REST file
+### Exercise 8. Iterating over the events inside a REST file
 
 Obviously, once we got an instance of the run *rn* we may iterate over all the events to get specific information and perform a dedicated analysis using the event or analysis tree methods. Each time we call the `TRestRun::GetEntry` method, the `aT` and `g4Ev` objects linked to the run will be updated with the new event and analysis information for that event entry.
 
@@ -207,7 +207,7 @@ for n in range(nEntries):
 	    print( "Entry: " + str(n) + " track: " + str(t) + " Energy: " + str(tckEv.GetTrack(t).GetEnergy())
 ```
 
-### Exercise 7. Retrieving specific observable values
+### Exercise 9. Retrieving specific observable values
 
 Once we get access to the analysis tree in an iterative way we may recover the value of any of the observables inside the tree and do any calculation we are willing to, create a custom histogram, draw them, print their value, etc.
 
@@ -227,7 +227,7 @@ Although we can also retrieve directly some basic calculations using some of the
 energyRatioAverage = rn.GetAnalysisTree().GetObservableAverage("sAna_AmplitudeIntegralRatio")
 ```
 
-### Exercise 8. Getting event entries that satisfy certain conditions
+### Exercise 10. Getting event entries that satisfy certain conditions
 
 We have been working with a calibration file which registers reference events in our detector, such as X-rays produced by a radiactive source. Imagine that now we want to select background events that have properties similar to the properties from our reference calibration file.
 
@@ -253,7 +253,7 @@ rn.GetEventWithID(6811)
 
 Now we can print the event, draw it, access the event data members or check its corresponding observable values.
 
-### Exercise 9. Quick access to the file information using restRoot
+### Exercise 11. Quick access to the file information using restRoot
 
 Another way to access the information inside a REST-for-Physics generated file is to provide it as an argument to the `restRoot` executable. In that case, the event pointer (ev0), the run object (run0), the analysis tree (ana_tree0), and the metadata objects (md0_) present inside the file will be automatically instantiated.
 
@@ -302,7 +302,7 @@ root [2] ev0->PrintEvent()
 root [3] ana_tree0->PrintObservables()
 ```
 
-### Exercise 10. Visualizing events using a macro
+### Exercise 12. Visualizing events using a macro
 
 Finally, we can load the official REST-for-Physics macros inside `restRoot` by using the alias `restRootMacros` and visualize the events using a ROOT viewer built as a custom application.
 
