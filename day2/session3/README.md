@@ -144,7 +144,7 @@ In the same way as we print the event data information and the observable values
 As we did previously, we need to pre-load the entry we wish to visualize, and have created a `TCanvas` window instance previously.
 
 ```python
-c = ROOT.TCanvas
+c = ROOT.TCanvas()
 rn.GetEntry(100)
 tckEv.DrawEvent()
 ```
@@ -161,9 +161,7 @@ import REST
 rn = ROOT.TRestRun("../../data/R11567_00001_RawToTrack_Background_21hr_jgalan_2.3.15.root" )
 ```
 
-We need to create an event holder and tell the run instance which type of event we want to read.
-
-Reading each event type requires that we create an instance and inform `TRestRun` the event type we want to read.
+Reading each event type requires that we create an instance (or data holder) of the specific event type we want to read and inform the active instance `rn` of `TRestRun`.
 
 ```
 rawEv = ROOT.TRestRawSignalEvent()
