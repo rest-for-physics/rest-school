@@ -153,14 +153,45 @@ The `DrawEvent` method might receive an optional argument that allows to control
 
 ### Exercise 6. Accessing event types other than the last output event
 
-TODO
+If we have processed a file using `inputEventStorage=True` we will be able to access any event type present in the complete event data processing chain. The file `R11567_00001_RawToTrack_Background_21hr_jgalan_2.3.15.root` has been processed with that option enabled. We will use it during this exercise.
 
-If we have processed the file using `inputEventStorage=True` we will be able to access any event type present in the complete event data processing chain. In the following example we will access different event types stored in the file.
+```
+import ROOT
+import REST
+rn = ROOT.TRestRun("../../data/R11567_00001_RawToTrack_Background_21hr_jgalan_2.3.15.root" )
+```
 
-First we need to create an event holder and tell the run instance which type of event we want to read.
+We need to create an event holder and tell the run instance which type of event we want to read.
 
+Reading each event type requires that we create an instance and inform `TRestRun` the event type we want to read.
 
-Note that in order to register the event data inside our analysis file it is necesary to enable the parameter `outputEventStorage`. If this parameter is not specified, its default will be normally `on`.
+```
+rawEv = ROOT.TRestRawSignalEvent()
+rn.SetInputEvent(rawEv)
+```
+
+Then we can just update the entry so that the event data is loaded into the event instance.
+
+```
+rn.GetEntry(10)
+rawEv.PrintEvent()
+rawEv.DrawEvent() 
+```
+
+Inside the file provided we have in addition to `TRestRawSignalEvent`, a `TRestDetectorSignalEvent`, a `TRestDetectorHitsEvent` and a `TRestTrackEvent`.
+
+We may try to load any of those to check the contents of the event data at a particular stage of the event data processing.
+
+For example, retrieving the contents of the `TRestTrackEvent` would be something like.
+
+```
+tckEv = ROOT.TRestTrackEvent()
+rn.SetInputEvent(tckEv)
+rn.GetEntry(10)
+tckEv.PrintEvent()
+```
+
+Try with the other event types!
 
 ### Exercise 6. Iterating over the events inside a REST file
 
