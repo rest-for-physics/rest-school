@@ -137,32 +137,61 @@ aT.PrintObservables()
 
 **HINT:** In the same way as `PrintMetadata` might help to understand where the information is stored inside the class data members, the `PrintEvent` method implementation of each specific event type might help to understand how the event information can be accessed directly.
 
-### Exercise 5. Drawing events
+### Exercise 6. Drawing events
 
 In the same way as we print the event data information and the observable values of each event, we may visualize the event invoking the method `DrawEvent` available in any class inheriting from `TRestEvent`.
 
 As we did previously, we need to pre-load the entry we wish to visualize, and have created a `TCanvas` window instance previously.
 
 ```python
-c = ROOT.TCanvas
+c = ROOT.TCanvas()
 rn.GetEntry(100)
 tckEv.DrawEvent()
 ```
 
 The `DrawEvent` method might receive an optional argument that allows to control what information we want to visualize from the event data. See for example the [TRestGeant4Event::DrawEvent](https://sultan.unizar.es/rest/classTRestGeant4Event.html#acbfe704537c529ce05fa101719d34b56) or the [TRestRawSignalEvent::DrawEvent](https://sultan.unizar.es/rest/classTRestRawSignalEvent.html#a5445f401b350b1d952670a7323594f6d) documentation.
 
-### Exercise 6. Accessing event types other than the last output event
+### Exercise 7. Accessing event types other than the last output event
 
-TODO
+If we have processed a file using `inputEventStorage=True` we will be able to access any event type present in the complete event data processing chain. The file `R11567_00001_RawToTrack_Background_21hr_jgalan_2.3.15.root` has been processed with that option enabled. We will use it during this exercise.
 
-If we have processed the file using `inputEventStorage=True` we will be able to access any event type present in the complete event data processing chain. In the following example we will access different event types stored in the file.
+```
+import ROOT
+import REST
+rn = ROOT.TRestRun("../../data/R11567_00001_RawToTrack_Background_21hr_jgalan_2.3.15.root" )
+```
 
-First we need to create an event holder and tell the run instance which type of event we want to read.
+Reading each event type requires that we create an instance (or data holder) of the specific event type we want to read and inform the active instance `rn` of `TRestRun`.
 
+```
+rawEv = ROOT.TRestRawSignalEvent()
+rn.SetInputEvent(rawEv)
+```
 
-Note that in order to register the event data inside our analysis file it is necesary to enable the parameter `outputEventStorage`. If this parameter is not specified, its default will be normally `on`.
+Then we can just update the entry so that the event data is loaded into the event instance.
 
-### Exercise 6. Iterating over the events inside a REST file
+```
+rn.GetEntry(10)
+rawEv.PrintEvent()
+rawEv.DrawEvent() 
+```
+
+Inside the file provided we have in addition to `TRestRawSignalEvent`, a `TRestDetectorSignalEvent`, a `TRestDetectorHitsEvent` and a `TRestTrackEvent`.
+
+We may try to load any of those to check the contents of the event data at a particular stage of the event data processing.
+
+For example, retrieving the contents of the `TRestTrackEvent` would be something like.
+
+```
+tckEv = ROOT.TRestTrackEvent()
+rn.SetInputEvent(tckEv)
+rn.GetEntry(10)
+tckEv.PrintEvent()
+```
+
+Try with the other event types!
+
+### Exercise 8. Iterating over the events inside a REST file
 
 Obviously, once we got an instance of the run *rn* we may iterate over all the events to get specific information and perform a dedicated analysis using the event or analysis tree methods. Each time we call the `TRestRun::GetEntry` method, the `aT` and `g4Ev` objects linked to the run will be updated with the new event and analysis information for that event entry.
 
@@ -178,7 +207,7 @@ for n in range(nEntries):
 	    print( "Entry: " + str(n) + " track: " + str(t) + " Energy: " + str(tckEv.GetTrack(t).GetEnergy())
 ```
 
-### Exercise 7. Retrieving specific observable values
+### Exercise 9. Retrieving specific observable values
 
 Once we get access to the analysis tree in an iterative way we may recover the value of any of the observables inside the tree and do any calculation we are willing to, create a custom histogram, draw them, print their value, etc.
 
@@ -198,7 +227,7 @@ Although we can also retrieve directly some basic calculations using some of the
 energyRatioAverage = rn.GetAnalysisTree().GetObservableAverage("sAna_AmplitudeIntegralRatio")
 ```
 
-### Exercise 8. Getting event entries that satisfy certain conditions
+### Exercise 10. Getting event entries that satisfy certain conditions
 
 We have been working with a calibration file which registers reference events in our detector, such as X-rays produced by a radiactive source. Imagine that now we want to select background events that have properties similar to the properties from our reference calibration file.
 
@@ -224,7 +253,7 @@ rn.GetEventWithID(6811)
 
 Now we can print the event, draw it, access the event data members or check its corresponding observable values.
 
-### Exercise 9. Quick access to the file information using restRoot
+### Exercise 11. Quick access to the file information using restRoot
 
 Another way to access the information inside a REST-for-Physics generated file is to provide it as an argument to the `restRoot` executable. In that case, the event pointer (ev0), the run object (run0), the analysis tree (ana_tree0), and the metadata objects (md0_) present inside the file will be automatically instantiated.
 
@@ -273,7 +302,7 @@ root [2] ev0->PrintEvent()
 root [3] ana_tree0->PrintObservables()
 ```
 
-### Exercise 10. Visualizing events using a macro
+### Exercise 12. Visualizing events using a macro
 
 Finally, we can load the official REST-for-Physics macros inside `restRoot` by using the alias `restRootMacros` and visualize the events using a ROOT viewer built as a custom application.
 
