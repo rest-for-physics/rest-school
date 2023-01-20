@@ -53,7 +53,7 @@ int calibrate_data(){
     func->SetParNames("Constant","Mean_value","Sigma");
 
     // Call TH1::Fit with the name of the TF1 object.
-    auto fitresult = h.Fit(func, "LS", "", 2000, 6000);
+    auto fitresult = h.Fit(func, "LS", "", 0.5*peak[0], 1.5*peak[0]);
 
     // Draw the histogram and fit
     h.DrawClone();
