@@ -79,7 +79,23 @@
             </addProcess>
 
             <!-- Signal analysis -->
-            <addProcess type="TRestRawSignalAnalysisProcess" name="sAna" value="ON" file="processes.rml"/>
+            <addProcess type="TRestRawSignalAnalysisProcess" name="sAna" title="" verboseLevel="info" observable="all">
+
+                <!-- This parameter is used to define the baseline calculation -->
+                <parameter name="baseLineRange" value="(${BL_MIN},${BL_MAX})" />
+
+                <!-- This parameter is used to define the signal integration window -->
+                <parameter name="integralRange" value="(${INT_MIN},${INT_MAX})" />
+
+                <!-- These parameters define the integral with threshold.
+                    threshold : number of baseline noise sigmas to consider a point for integration.
+                    pointsOverThreshold : Number of consecutive points over threshold to be considered for integration.
+                    minPeakAmplitude : Minimum peak signal amplitude to be considered at all.
+                -->
+                <parameter name="pointThreshold" value="${POINT_TH}" />
+                <parameter name="pointsOverThreshold" value="${NPOINTS}" />
+                <parameter name="signalThreshold" value="${SGNL_TH}" />
+            </addProcess>
 
             <addProcess type="TRestEventRateAnalysisProcess" name="rateAna" observables="all" value="ON"/>
 
