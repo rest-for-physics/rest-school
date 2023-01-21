@@ -11,11 +11,6 @@ double fitf(double* x, double *par){
 
 int fit_calibration(){
     
-    
-    // initialize parameters
-	double binw = 60; // bin width in seconds
-	int rate_threshold = 10; // rate threshold in counts per binw. If the rate is below, the detector is regarded to be inactive, and the bin is not counted towards the measurement time
-
     // Load dataframe
     ROOT::RDataFrame df("AnalysisTree", "../../data/R01855/R01855_0*root");
     
