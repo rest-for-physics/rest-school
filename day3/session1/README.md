@@ -95,7 +95,7 @@ restManager --c veto.rml --f R01208_Ar2Iso_Background14h_14Vetos_IccubFEC-000.aq
 Note that the output filename is now much more shorter since we have chosen it to be this way at the `TRestRun` section. We will open now the file for quick inspection.
 
 ```
-restRoot R01208_output.root
+restRoot R01208_quickData.root
 ```
 
 And we will check the observables we can find inside some of the events:
@@ -136,6 +136,30 @@ The event ids selected should be know registered inside our `ids.txt` file.
 
 ### Exercise 3. Re-processing events on a given event selection
 
+Sometimes we will be willing to run a computationally expensive analysis on a particular selection of events. It is not worth to run this expensive data processing on each event (e.g. we could be wasting our precious CPU time to process noisy events, or we just want to consider events from a population that we are not interested in - as it could be the events at a given energy range) we can just use the results of a quick data analysis to select that population, or use an external event id list obtained by some other means.
+
+The file `vetoOnSelection.rml` implements a new process `TRestEventSelectionProcess`. This process is a framework process and thus can be applied at any stage of the data processing. Although in our case it makes sense that it is applied as soon as possible in order to reduce the event processing load.
+
+**NOTE:** The event id is read from the AQS file, thus the selection process cannot be placed before!
+
+Looking to the `TRestEventSelectionProcesss` defined inside `vetoOnSelection.rml` we can see how we have introduced a condition similar to the one applied in the previous exercise.
+
+We can now test the process and verify that only the selected entries are present at the output file.
+
+```
+restManager --c vetoOnSelection.rml --f R01208_Ar2Iso_Background14h_14Vetos_IccubFEC-000.aqs
+```
+
+We have reduced the number of events to be processed to the number of events in our selection, otherwise, since our aqs file has been truncated we will run into troubles, thats the reason we reduced the number of events to be processed to 19 in our example, inside `vetoOnSelection.rml`.
+
+We may know check inside the new file and verify that the event ids found at the output file correspond with those we were expecting to be processed.
+
+```
+restRoot data/R01208_quickData_Selection.root
+root [0] for( int n = 0; n < run0->GetEntries(); n++ ) { run0->GetEntry(n); std::cout << "id:" << ana_tree0->GetEventID() << std::endl; }
+```
+
+If we have a look now to the analysis tree we will see that this time we do not have `veto` observables, and for the `mm` process all the observables have been added, instead of a particular selection.
 
 ### Exercise 4. Testing individual raw processes
 
