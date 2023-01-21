@@ -84,9 +84,9 @@ In the example we will use for this exercise we define 4 processes:
 
 #### Launching the event data processing
 
-This time we will use another file coming from some tests that were performed at the IAXO-D0 prototype including a more sophisticated muon veto system. The preliminar tests were carried including 14 veto signals. As it is the case in the previous example the original file has been truncated in order to save disk space.
+This time we will use another file coming from some tests that were performed at the IAXO-D0 prototype including a more sophisticated muon veto system. The preliminar tests were carried including 14 veto signals. This example has been extracted from the rawlib validation pipeline, correspoding to the [Veto analysis](https://github.com/rest-for-physics/rawlib/blob/master/.github/workflows/validation.yml) validation. As it is the case in the previous example the original file has been truncated in order to save disk space.
 
-Now we can process our file to produce some observables that could be used for analysis.
+Now we can process our file to produce some observables that will be used for analysis later on.
 
 ```
 restManager --c veto.rml --f R01208_Ar2Iso_Background14h_14Vetos_IccubFEC-000.aqs
@@ -113,13 +113,26 @@ As we have seen in session 2.3 we may now create a selection of events using a p
 We get then a list of events, you may try to get a different list by changing the values:
 
 ```
-run0->GetEventIdsWithConditions("vetoRaw_MaxPeakAmplitude > 1000 && vetoRaw_AveragePeakTime > 200")
-run0->GetEventIdsWithConditions("vetoRaw_MaxPeakAmplitude > 2000 && vetoRaw_AveragePeakTime > 200")
+root [3] run0->GetEventIdsWithConditions("vetoRaw_MaxPeakAmplitude > 1000 && vetoRaw_AveragePeakTime > 200")
+root [4] run0->GetEventIdsWithConditions("vetoRaw_MaxPeakAmplitude > 2000 && vetoRaw_AveragePeakTime > 200")
 ```
 
 You should see now on screen a vector with the event ids that have been selected. The constrains we imposed are our particular definition to decide when the veto system has detected a cosmic muon. This is done just to illustrate this example, in practice a more sophisticated analysis is required to enhance our muon discrimination capabilitites.
 
 As in the previous example you may check now any other `md_` metadata class contents, or inspect the different events using the methods that you learnt in session 2.3.
+
+#### Exporting the ids to a text file
+
+Before closing the previous ROOT session lets write a file few selected ids, and write them to a file:
+
+```
+root [5] std::vector <int> ids = run0->GetEventIdsWithConditions("vetoRaw_MaxPeakAmplitude > 3500 && vetoRaw_AveragePeakTime > 200")
+root [6] FILE *f = fopen("ids.txt", "wt");
+root [7] for( const auto & x:ids ) fprintf( f, "%d\n", x );
+root [8] fclose( f );
+```
+
+The event ids selected should be know registered inside our `ids.txt` file.
 
 ### Exercise 3. Re-processing events on a given event selection
 
