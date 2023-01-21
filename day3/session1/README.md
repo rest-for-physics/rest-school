@@ -163,6 +163,108 @@ If we have a look now to the analysis tree we will see that this time we do not 
 
 ### Exercise 4. Testing individual raw processes
 
+On top of using a pre-defined event data processing chain, it is also possible to use those processes standalone, so that we can do tests in an isolated manner.
+
+#### Exercise 4.1 Adding signal noise 
+
+In this first example we will create a new python script that uses the TRestRawSignalAddNoiseProcess to mimic the white electronic noise we observe in experimental data.
+
+Open a new file, `addNoise.py`, and create a dummy rawsignal event (TRestRawSignalEvent) where we will add just one signal with 512 points initialized to zero.
+
+```
+import ROOT
+import REST
+
+rawEv = ROOT.TRestRawSignalEvent()
+
+sgnl = ROOT.TRestRawSignal()
+
+sgnl.SetSignalID(13)
+for x in range(0,512):
+    sgnl.AddPoint(0)
+
+rawEv.AddSignal(sgnl)
+```
+
+Now we just need to initialize the process using a configuration file
+
+```
+addNoiseProcess = ROOT.TRestRawSignalAddNoiseProcess("metadata.rml")
+```
+
+then we are ready to test our event processing for our dummy generated event
+
+```
+outEv = addNoiseProcess.ProcessEvent( rawEv )
+```
+
+we may check now some of the properties of the signal to check the effect of processing the event, such as the baseline fluctuations
+
+```
+outEv.GetSignal(0).CalculateBaseLine(50,450)
+print( "The baseline fluctuation sigma is : " + outEv.GetSignal(0).GetBaseLineSigma() )
+```
+
+or draw the event to visualize the result
+
+```
+c = ROOT.TCanvas()
+outEv.DrawEvent()
+c.Print("noise.png")
+```
+
+#### Exercise 4.2. Signal convolution
+
+In this example we will introduce the shaping of the electronics through the process `TRestRawSignalShapingProcess`. This time we will create  a C-macro process our event.
+
+We may create a new file `shaping.C` where we will define a method,
+
+```
+Int_t shaping( ) {
+
+}
+```
+
+although another option would be to test it inside a `restRoot` session directly.
+
+In a similar way as we did in the previous example we will first create a dummy event with a signal that contains two discrete energy deposits. Inside the method definition we start writting:
+
+```
+    TRestRawSignalEvent* ev = new TRestRawSignalEvent();
+
+    TRestRawSignal* sgnl = new TRestRawSignal(512);
+
+    sgnl->IncreaseBinBy(170, 100);
+    sgnl->IncreaseBinBy(250, 250);
+
+    ev->AddSignal(*sgnl);
+```
+
+Then we initialize the shaping process using an RML file,
+
+```
+    string cfgFile = "shaper.rml";
+    TRestRawSignalShapingProcess* shaper = new TRestRawSignalShapingProcess((char*)cfgFile.c_str());
+    shaper->PrintMetadata();
+```
+
+We may visualize the event before processing it:
+
+```
+    TCanvas c;
+    ev->DrawEvent();
+```
+
+and then we can process and visualize it again:
+
+```
+TRestRawSignalEvent* shapedEvent = (TRestRawSignalEvent*) shaper->ProcessEvent(ev);
+shapedEvent->DrawEvent()
+```
+
+#### Exercise 4.3. Rawlib pipeline validation
+
+The previous exercises are based on the examples found at the rawlib [pipeline directory](https://github.com/rest-for-physics/rawlib/tree/master/pipeline) which are used for Continous Integration tests. Each directory inside that directory defines a working example. We highly encouragee you to have a look there for more complete and recent examples.
 
 ### Exercise 5. Rawsignal operations and visualization
 
