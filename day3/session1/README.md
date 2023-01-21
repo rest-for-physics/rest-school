@@ -1,9 +1,11 @@
 
 ### Exercise 1. Launching a first processing chain
 
-In this exercise we will test few processes that operate at the rawsignal processing domain and we will check how some metadata members can be initialized from the input filename. 
+In this exercise we will test few processes that operate at the rawsignal processing domain and we will check how some metadata members can be initialized from the input filename.
 
-The following example is a reduced version of the complete CAST experimental detector data analysis where we define 6 processes:
+The following example is a reduced version of the complete CAST experimental detector data processing and analysis. The rawdata contains waveforms that have been registered from the micromegas detector channels itself, and an additional signal coming from a muon veto system that helps discriminate events that are correlated with muon interactions.
+
+Inside our reduced event processing chain we define 6 processes:
 
 #### Processes description
 
@@ -16,7 +18,7 @@ The following example is a reduced version of the complete CAST experimental det
 
 \+ A similar result could be achieved by using the `std::map` observables added by the `SignalAnalysis` process, leaving the user more freedom to create her/is own channel activity definitions later on. Still, it is interesting to fix those activity maps by a process that guarantees that every user produces them in the same way, and are univocally produced using metadata parameters that haven been stored to disk with a versioning system.
 
-\+\+ Having dedicated processes for specific tasks leaves more flexibility to the process developer to decide the design of the process, metadata members, event data transformation, options, etc. Anyhow, re-exploiting processes and code is also a highly desired feature in a software project, we will see in the exercise 2 how the veto signal analysis can also be worked out using the SignalAnalysis process on a reduced group of signals.
+\+\+ Having dedicated processes for specific tasks leaves more flexibility to the process developer to decide the design of the process, metadata members, event data transformation, options, etc. Anyhow, re-exploiting processes and code is also a highly desired feature in a software project, we will see in the exercise 2 how the veto signal analysis can also be worked out using the SignalAnalysis process operating on a reduced group of signals.
 
 \+\+\+ The processes that do not need to access specific event type information (e.g. events that only need access to `TRestEvent` header, or to the analysis tree) will be found directly in the framework and will be able to operate at any event processing stage with any event type.
 
@@ -33,12 +35,10 @@ mkdir data
 Then we can launch the processing chain using `restManager`.
 
 ```
-restManager --c CAST.rml --f ../../data/R10513_Calibration_15min_Vm_340_Vd_113_Pr_1.4_Gain_0x1_Shape_0xD_Clock_0x02-000.aqs 
+restManager --c cast.rml --f ../../data/R10513_Calibration_15min_Vm_340_Vd_113_Pr_1.4_Gain_0x1_Shape_0xD_Clock_0x02-000.aqs 
 ```
 
-The output on screen will show us the result from invoking `PrintMetadata` for each of the processes we added in our event processing chain, defined inside the file `CAST.rml`.
-
-Each process will usually show the metadata parameters used to define the process behaviour, and a list of observables (if any) that were added by the process to the analysis tree.
+The output on screen will show us the result from invoking `PrintMetadata` for each of the processes we added in our event processing chain, defined inside the file `cast.rml`. Each process will show the metadata parameters used to define the process behaviour and a list of observables (if any) that were added by the process to the analysis tree.
 
 We can now check inside the generated file and inspect the contents.
 
@@ -54,8 +54,15 @@ We may check for example the contents of the `TRestDetector` metadata class inst
 root [0] md_detector->PrintMetadata()
 ```
 
-You may check now any other `md_` metadata class using `PrintMetadata`, and inspect the different events using the methods that you learnt in session 2.3.
+You may check now any other `md_` metadata class using `PrintMetadata` and inspect the different events (and corresponding analysis tree) using the methods that you learnt in session 2.3.
 
+```
+root [1] md_xyz->PrintMetadata()
+root [2] run0->PrintMetadata()
+root [3] run0->GetEntry(10)
+root [3] run0->GetAnalysisTree()->PrintObservables()
+...
+```
 ### Exercise 2. Launching a processing chain with several rawsignal analysis processes
 
 As soon as the input/output event types match, we have full flexibility to build any processing chain we need. One interesting feature is the potential to build event data chains where processes can be exploited more than once. For example, a rawsignal analysis process might be used to extract information before and after a given event transformation took place, such as before and after a smoothing process, or it can operate on different groups of signals.
@@ -70,10 +77,49 @@ There are clear advantages on re-using processes for different applications, but
 
 In the example we will use for this exercise we define 4 processes:
 
-1. *virtualDAQ (MultiFEMINOSToSignal)*: It is responsible to read the binary file and fill in a `TRestRawSignalEvent`.
-2. *veto (SignalAnalysis)*: It operates on a group of channels which are connected to a muon veto system, and it extracts the maximum amplitudes and peak times of each signal which is finally stored in a `std::map` inside the analysis tree.
-3. *rmChannels (SignalRemoveChannels)*: It removes the group of channels corresponding to the veto system.
-4. *mm (SignalAnalysis)*: It performs the pulse shape analysis on the remaining 
+1. **virtualDAQ (MultiFEMINOSToSignal)**: It is responsible to read the binary file and fill in a `TRestRawSignalEvent`.
+2. **veto (SignalAnalysis)**: It operates on a group of channels which are connected to a muon veto system, and it extracts the maximum amplitudes and peak times of each signal which is finally stored in a `std::map` inside the analysis tree.
+3. **rmChannels (SignalRemoveChannels)**: It removes the group of channels corresponding to the veto system.
+4. **mm (SignalAnalysis)**: It performs the pulse shape analysis on the remaining channels that belong to the micromegas detector.
+
+#### Launching the event data processing
+
+This time we will use another file coming from some tests that were performed at the IAXO-D0 prototype including a more sophisticated muon veto system. The preliminar tests were carried including 14 veto signals. As it is the case in the previous example the original file has been truncated in order to save disk space.
+
+Now we can process our file to produce some observables that could be used for analysis.
+
+```
+restManager --c veto.rml --f R01208_Ar2Iso_Background14h_14Vetos_IccubFEC-000.aqs
+```
+
+Note that the output filename is now much more shorter since we have chosen it to be this way at the `TRestRun` section. We will open now the file for quick inspection.
+
+```
+restRoot R01208_output.root
+```
+
+And we will check the observables we can find inside some of the events:
+
+```
+root [0] run0->GetAnalysisTree()->PrintObservables()
+root [1] run0->GetEntry(11)
+root [2] run0->GetAnalysisTree()->PrintObservables()
+```
+
+One important difference in this processed file is that we have added only a selection of observables in each of the processes. This particular selection is nothing special, and it has been chosen just for the shake of illustrating this example.
+
+As we have seen in session 2.3 we may now create a selection of events using a particular condition at the analysis tree. We will use the maximum pulse amplitude between all the veto signals, and the peak time averaged for those veto signals that were found above threshold.
+
+We get then a list of events, you may try to get a different list by changing the values:
+
+```
+run0->GetEventIdsWithConditions("vetoRaw_MaxPeakAmplitude > 1000 && vetoRaw_AveragePeakTime > 200")
+run0->GetEventIdsWithConditions("vetoRaw_MaxPeakAmplitude > 2000 && vetoRaw_AveragePeakTime > 200")
+```
+
+You should see now on screen a vector with the event ids that have been selected. The constrains we imposed are our particular definition to decide when the veto system has detected a cosmic muon. This is done just to illustrate this example, in practice a more sophisticated analysis is required to enhance our muon discrimination capabilitites.
+
+As in the previous example you may check now any other `md_` metadata class contents, or inspect the different events using the methods that you learnt in session 2.3.
 
 ### Exercise 3. Re-processing events on a given event selection
 
