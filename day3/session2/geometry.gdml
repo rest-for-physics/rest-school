@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<!-- ##VERSION Boxes basic geometry Version 1.0 (Neon_ISO - ${GDML_PRESSURE}bar - Quencher: 0.05)## -->
+
+<!DOCTYPE gdml [
+<!ENTITY materials SYSTEM "https://rest-for-physics.github.io/materials/rest.xml">
+]>
+
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+
+    <!-- All values should be in mm -->
+
+    <define>
+        <constant name="world_size" value="20000" />
+
+        <!-- Dummy values just for illustration. 0.9 is for Neon. -->
+        <variable name="targetGasDensity" value="${GDML_PRESSURE}*0.9"/>  <!-- mg/cm3 -->
+        <variable name="quencherDensity" value="${GDML_PRESSURE}*0.05"/> <!-- mg/cm3 -->
+        <variable name="quencherFraction" value="0.05"/>
+        <variable name="gasTemperature" value="300"/> <!-- K -->
+        <variable name="gasPressure" value="${GDML_PRESSURE}"/> <!-- bar -->
+
+        <!-- We define a 5x5cm2 readout plane with 10cm drift distance -->
+        <constant name="boxDrift" value="1000" />
+        <constant name="boxSize" value="500" />
+    </define>
+
+    &materials;
+
+    <solids>
+        <box name="WorldSolid" x="world_size" y="world_size" z="world_size" lunit="mm" />
+        <box name="boxSolid" x="boxSize" y="boxSize" z="boxDrift" lunit="mm" />
+    </solids>
+
+    <structure>
+
+        <!-- {{{ Volumes definition (material and solid assignment) -->
+        <volume name="boxVolume">
+            <materialref ref="Neon_ISO"/>
+            <solidref ref="boxSolid"/>
+        </volume>
+        <!-- }}} -->
+
+        <!-- {{{ Physical volume definition (volume and position assignment) -->
+        <volume name="World">
+            <materialref ref="Air"/>
+            <solidref ref="WorldSolid"/>
+
+            <physvol name="box">
+                <volumeref ref="boxVolume"/>
+                <position name="boxPosition" unit="mm" x="0" y="0" z="0"/>
+            </physvol>
+        </volume>
+        <!-- }}} -->
+    </structure>
+
+    <setup name="Default" version="1.0">
+        <world ref="World"/>
+    </setup>
+
+</gdml>
