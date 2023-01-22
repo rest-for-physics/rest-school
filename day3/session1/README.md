@@ -264,8 +264,10 @@ shapedEvent->DrawEvent()
 
 #### Exercise 4.3. Rawlib pipeline validation
 
-The previous exercises are based on the examples found at the rawlib [pipeline directory](https://github.com/rest-for-physics/rawlib/tree/master/pipeline) which are used for Continous Integration tests. Each directory inside that directory defines a working example. We highly encouragee you to have a look there for more complete and recent examples.
+The previous exercises are based on the examples found at the rawlib [pipeline directory](https://github.com/rest-for-physics/rawlib/tree/master/pipeline) which are used for Continous Integration tests. Each directory inside that directory defines a working example. We highly encouragee you to have a look there for more complete and up-to-date examples.
 
-### Exercise 5. Rawsignal operations and visualization
+### Example 5: Using pyRoot and numpy to quickly visualize rawsignals and derived parameters 
 
+This example, `PyRoot_SignalPlotter.ipynb`, is a Jupyter notebook. It demonstrates how we can combine ROOT and REST with python mathematical libraries to examine raw signals, while quickly visualizing noise reduction parameters. This could be a more convenient way for those who havce already some experience using `numpy` and `matplotlib.pyplot` libraries.
 
+**TODO**: Since this notebook already uses many REST functions, it will be presented in more detail in another session.

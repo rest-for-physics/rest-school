@@ -73,8 +73,5 @@ h->Fit(func, "L", "", 2000, 6000);
 ```
 The option "L" sets the fitting method to chi-squared. In addition we only perform the fit between 2000 and 6000. Finally we draw the histogram including the fit.
 
-### Example 3: Using pyRoot to quickly visualize data and derived parameters 
-This example is a Jupyter notebook. It demonstrates how we can call ROOT and REST with python to examine raw signals, while quickly visualizing noise reduction parameters. This makes it very convenient to prototype REST processes. Since this notebook already uses many REST functions, it will be presented in more detail in another session.
-
-### Example 4: Final exercise
+### Example 3: Final exercise
 In this macro, we again analysis a calibration run of IAXO-D0. First we want to fit the 55-Fe peak to obtain the calibration factor, use this to calibrate the data in the dataframe, and the produce a histogram showing the calibrated energy spectrum. In addition we produce a 2-dimensional hit map of the events in the detector.
