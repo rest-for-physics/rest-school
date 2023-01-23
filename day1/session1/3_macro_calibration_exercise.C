@@ -28,12 +28,12 @@ int calibrate_data(){
     // Searching the peak candidates with TSpectrum
     TSpectrum *s = new TSpectrum();
 
-    int sigma = 10; // peak finder
+    int sigma = 10; // a parameter of the peak finder that defines the search sensitivity
 
     Int_t nfound = s->Search(&h, sigma, "", 0.5); // searches for peaks in current histogram range
     printf("Found %d candidate peaks to fit\n", nfound);
 
-    auto peak = s->GetPositionX();
+    auto peak = s->GetPositionX(); // resturn the x position of the found peaks
 
     // Create a TF1 object using the fitf function. The last three parameters specify the range and the number of parameters for the function.
     TF1 *func = new TF1("fit",fitf,0,10000,3);
