@@ -186,7 +186,7 @@ for x in range(0,512):
 rawEv.AddSignal(sgnl)
 ```
 
-Now we just need to initialize the process using a configuration file
+Now we just need to initialize the process using a configuration file (where is the configuration file?)
 
 ```
 addNoiseProcess = ROOT.TRestRawSignalAddNoiseProcess("metadata.rml")
@@ -202,7 +202,7 @@ we may check now some of the properties of the signal to check the effect of pro
 
 ```
 outEv.GetSignal(0).CalculateBaseLine(50,450)
-print( "The baseline fluctuation sigma is : " + outEv.GetSignal(0).GetBaseLineSigma() )
+print( "The baseline fluctuation sigma is : " + str(outEv.GetSignal(0).GetBaseLineSigma()) )
 ```
 
 or draw the event to visualize the result
