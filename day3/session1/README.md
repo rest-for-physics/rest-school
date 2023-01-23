@@ -150,7 +150,7 @@ We can now test the process and verify that only the selected entries are presen
 restManager --c vetoOnSelection.rml --f R01208_Ar2Iso_Background14h_14Vetos_IccubFEC-000.aqs
 ```
 
-We have reduced the number of events to be processed to the number of events in our selection, otherwise, since our aqs file has been truncated we will run into troubles, thats the reason we reduced the number of events to be processed to 19 in our example, inside `vetoOnSelection.rml`.
+We have reduced the number of events to be processed to the number of events in our selection, otherwise, since our aqs file has been truncated we will run into troubles, thats the reason we reduced the number of events to be processed to 5 in our example, inside `vetoOnSelection.rml`.
 
 We may know check inside the new file and verify that the event ids found at the output file correspond with those we were expecting to be processed.
 
