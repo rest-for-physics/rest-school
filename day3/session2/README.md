@@ -125,11 +125,11 @@ std::cout << "Channel id: " << daqId << std::endl;
 **NOTE:** The channel id returned is the value corresponding to the daq channel id that is associated with the electronics acquisition system. If no decoding file was provided, then the physical readout channel number will be equal to the daq channel id.
 
 
-### Exercise 3. Diffusing and smearing punctual detector energy deposits
+### Exercise 3. Diffusing and smearing of punctual detector energy deposits
 
 For testing some of the processes present at the detector library we will generate a dummy Geant4 Monte Carlo simulation where we have a simple gas box filled with gas at high pressure.
 
-We will use the geometry defined at the `geometry.gdml` file, and the simulation conditions described inside `electron.rml`. The geometry defines a variable `GDML_PRESSURE` that allows us to play externally with the pressure/density of the gas, and we need to define before executing the example. On top of that we will need to create a directory where the output files will be generated.
+We will use the geometry defined at the `geometry.gdml` file, and the simulation conditions described inside `electrons.rml`. The geometry defines a variable `GDML_PRESSURE` that allows us to play externally with the pressure/density of the gas, and we need to define before executing the example. On top of that we will need to create a directory where the output files will be generated.
 
 ```
 mkdir data
@@ -137,10 +137,116 @@ export GDML_PRESSURE=10
 restG4 electrons.rml
 ```
 
-Once it has been 
+Once we have generated a first MonteCarlo file we will process it with the file `response.rml`. The `response.rml` file defines 4 processes:
 
+1. **g4Ana (Geant4Analysis):** It extracts some relevant information from the Geant4 event (or MonteCarlo truth).
+2. **toHits (Geant4ToDetectorHits):** It transforms the Geant4 event type into a Detector hits event type. We loss particle name and geometry information.
+3. **eDiff (DetectorElectronDiffusion):** It implements the effect of charge diffusion on the gas.
+4. **smear (DetectorHitsSmearing):** It introduces the effect of the energy resolution of the detector.
 
+We will execute the process file `response.rml` using as input the `restG4` generated file, which should be something such as `Run01058_Electron_School.root`.
 
+The example `response.rml` is not complete, when you execute it you will get some warning or error messages. Try executing now:
+
+```
+restManager --c response.rml --f data/Run01058_Electron_School.root
+```
+
+The error message tells you that the electron diffusion process is missing some parameters which are required. Those parameters can be initialized using the `TRestDetectorGas`. Thus, we can solve the error by adding a `TRestDetectorGas` definition. You may use any gas mixture you wish, for example:
+
+```
+        <TRestDetectorGas name="Neon-Isobutane 2Pct 10-10E3Vcm" pressure="1" file="server" />
+```
+
+Once you add the gas defintion, executing again the `response.rml`,
+
+```
+restManager --c response.rml --f data/Run01058_Electron_School.root
+```
+
+will lead to a different error. This time the gas is defined but the electron diffusion process does not know which electric field should use to obtain the gas properties. We need to define the electric field and the pressure inside the `TRestDetectorElectronDiffusionProcess`.
+
+```
+            <parameter name="gasPressure" value="10" />
+            <parameter name="electricField" value="1kV/cm" />
+```
+
+Finally, we will have to solve one last error when we try to re-execute the processing.
+
+```
+restManager --c response.rml --f data/Run01058_Electron_School.root
+```
+
+The process will complain because it does not find any `TRestDetectorReadout` instance. The electron diffusion process will only consider those energy deposits inside the active readout area, and for that it requires that we add the readout we defined in the previous exercise.
+
+```
+        <addMetadata type="TRestDetectorReadout" name="pixel" file="readouts.root" store="false" />
+```
+
+If we execute now the processing we should finally succeed,
+
+```
+restManager --c response.rml --f data/Run01058_Electron_School.root
+```
+
+#### Exercise 3.1 Visualizing the diffused events
+
+We had activated `inputEventStorage` inside `response.rml` so that we will have available both, the `TRestGeant4Event` input and the `TRestDetectorHitsEvent` output events.
+
+We may know checkout the effect of diffusion by visualizing the events inside the generated file:
+
+```
+restRoot data/Run01058_response_Electron.root
+root [0] run0->GetEntry(15)
+root [1] TCanvas c;
+root [2] ev0->DrawEvent("hist(Cont0,colz)[3]");
+root [3] c.Print("DetectorHits.png");
+root [4] TRestGeant4Event *g4Ev = new TRestGeant4Event();
+root [5] run0->SetInputEvent( g4Ev );
+root [6] run0->GetEntry(15);
+root [7] g4Ev->DrawEvent("hist(Cont0,colz)[3]");
+root [8] c.Print("Geant4Hits.png")
+root [9] .q
+```
+
+If you see no much difference between `DetectorHits.png` and `Geant4Hits.png` it might be that the conditions chosen do not produce an appreciable diffusion in the present configuration. It is also possible to define the longitudinal and transversal diffusion parameters manually to a higher value so that we can appreciate the effect. If we define the parameters explicitely, then these parameters will override the values extracted from the `TRestDetectorGas` definition.
+
+Try to add the following parameters now, and re-visualize the diffused event:
+
+```
+    <parameter name="longDiff" value="0.1" />
+    <parameter name="transDiff" value="0.1" />
+```
+
+You may change the above values to even higher ones to check the effect. Then, after processing have a look to the diffused `TRestDetectorHitsEvent`.
+
+#### Exercise 3.2 Visualizing the smeared energy spectrum
+
+Now we can also check the effect of the smearing process on the energy resolution of the electrons.
+
+```
+restRoot data/Run01058_response_Electron.root
+root [0] ana_tree0->Draw("hitsAna_energy>>hits(100,0,2000)" );
+root [1] ana_tree0->Draw("g4Ana_totalEdep>>g4(100,0,2000)" );
+root [2] hits->SetLineColor(kBlack);
+root [4] hits->SetFillColor(46);
+root [5] hits->SetFillColorAlpha(kRed, 0.35);
+root [6] g4->SetLineColor(kBlack);
+root [5] g4->SetFillColorAlpha(kBlue, 0.25);
+root [7] g4->Draw()
+root [8] hits->Draw("same")
+root [9] c1->Print("smear.png");
+root [10] .q
+```
+
+**REMINDER:** We are using `restRoot` to quickly open one file, but remember that we can do at any time
+
+```
+TRestRun run("data/Run01058_response_Electron.root");
+run.GetAnalysisTree()
+```
+
+in order to get access to the analysis tree.
 
 ### Exercise 4. Detector event reconstruction
 

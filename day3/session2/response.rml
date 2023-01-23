@@ -24,12 +24,12 @@ internal values are saved.
         <parameter name="verboseLevel" value="1"/>
         <parameter name="overwrite" value="off"/>
 
-        <parameter name="outputFileName" value="data/Run_[fRunType]_[fRunTag].root"/>
+        <parameter name="outputFileName" value="data/Run[fRunNumber]_[fRunType]_[fRunTag].root"/>
 
     </TRestRun>
 
     <TRestProcessRunner name="TemplateEventProcess" verboseLevel="info">
-        <parameter name="eventsToProcess" value="100"/>
+        <parameter name="eventsToProcess" value="0"/>
         <parameter name="threadNumber" value="2"/>
 
         <parameter name="inputAnalysisStorage" value="on"/>
@@ -55,8 +55,8 @@ internal values are saved.
         </addProcess>
 
         <addProcess type="TRestDetectorHitsSmearingProcess" name="smear" title="Energy resolution smearing">
-            <parameter name="energyReference" value="6keV" />
-            <parameter name="resolutionReference" value="13" />
+            <parameter name="energyReference" value="250keV" />
+            <parameter name="resolutionReference" value="15" />
         </addProcess>
 
     </TRestProcessRunner>

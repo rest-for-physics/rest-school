@@ -26,14 +26,14 @@
 
         <parameter name="seed" value="17021"/>
 
-        <parameter name="nEvents" value="100"/>
+        <parameter name="nEvents" value="10000"/>
         <parameter name="registerEmptyTracks" value="false"/>
         <parameter name="saveAllEvents" value="false"/>
 
         <generator type="point" position="(0,0,0)" units="mm">
             <source particle="e-">
                 <angular type="isotropic"/>
-                <energy type="mono" energy="2" units="MeV"/>
+                <energy type="mono" energy="250" units="keV"/>
             </source>
         </generator>
 
