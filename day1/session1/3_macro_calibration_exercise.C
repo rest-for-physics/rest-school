@@ -25,11 +25,6 @@ int calibrate_data(){
     auto h1 = df_filtered.Histo1D({"h","Raw data", 250, 0, 10000},"tckAna_MaxTrackEnergy");
     auto h = h1.GetValue(); // to convert the RDataFrame ROOT::RDF::RResultPtr<TH1D> to TH1D
 
-    // Print histogram
-    TCanvas* c = new TCanvas();
-    h.GetXaxis()->SetTitle("Energy [ADC]");
-    h.GetYaxis()->SetTitle("Counts");
-
     // Searching the peak candidates with TSpectrum
     TSpectrum *s = new TSpectrum();
 
@@ -54,8 +49,11 @@ int calibrate_data(){
 
     // Call TH1::Fit with the name of the TF1 object.
     auto fitresult = h.Fit(func, "LS", "", 0.5*peak[0], 1.5*peak[0]);
-
-    // Draw the histogram and fit
+    
+    // Draw the histogram and fitted function
+    TCanvas* c = new TCanvas();
+    h.GetXaxis()->SetTitle("Energy [ADC]");
+    h.GetYaxis()->SetTitle("Counts");
     h.DrawClone();
     
     // access the fit result to calculate the calibration factor
