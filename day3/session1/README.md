@@ -84,7 +84,7 @@ In the example `veto.rml` we define 4 processes:
 
 #### Launching the event data processing
 
-This time we will use another file coming from some tests that were performed at the IAXO-D0 prototype including a more sophisticated muon veto system. The preliminar tests were carried including 14 veto signals. This example has been extracted from the rawlib validation pipeline, correspoding to the [Veto analysis](https://github.com/rest-for-physics/rawlib/blob/master/.github/workflows/validation.yml) validation. As it is the case in the previous example the original file has been truncated in order to save disk space.
+This time we will use a file coming from some tests that were performed at the IAXO-D0 prototype including a more sophisticated muon veto system. The preliminar tests were carried including 14 veto signals. This example has been extracted from the rawlib validation pipeline, correspoding to the [Veto analysis](https://github.com/rest-for-physics/rawlib/blob/master/.github/workflows/validation.yml) validation. As it is the case in the previous example the original file has been truncated in order to save disk space.
 
 Now we can process our file to produce some observables that will be used for analysis later on.
 
