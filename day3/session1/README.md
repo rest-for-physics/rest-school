@@ -75,7 +75,7 @@ There are clear advantages on re-using processes for different applications, but
 
 #### Processes description
 
-In the example we will use for this exercise we define 4 processes:
+In the example `veto.rml` we define 4 processes:
 
 1. **virtualDAQ (MultiFEMINOSToSignal)**: It is responsible to read the binary file and fill in a `TRestRawSignalEvent`.
 2. **veto (SignalAnalysis)**: It operates on a group of channels which are connected to a muon veto system, and it extracts the maximum amplitudes and peak times of each signal which is finally stored in a `std::map` inside the analysis tree.
