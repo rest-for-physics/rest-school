@@ -3,7 +3,7 @@
 
 In this exercise we will test few processes that operate at the rawsignal processing domain and we will check how some metadata members can be initialized from the input filename.
 
-The following example is a reduced version of the complete CAST experimental detector data processing and analysis. The rawdata contains waveforms that have been registered from the micromegas detector channels itself, and an additional signal coming from a muon veto system that helps discriminate events that are correlated with muon interactions.
+The following example is a reduced version of the complete CAST experimental detector data processing and analysis. The rawdata contains waveforms that have been registered from the micromegas detector channels itself, and an additional signal coming from a muon veto system that helps discriminate events that are correlated with muon interactions. We will use the file `cast.rml`.
 
 Inside our reduced event processing chain we define 6 processes:
 
