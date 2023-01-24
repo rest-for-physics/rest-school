@@ -119,7 +119,7 @@ graph2.Draw("same");
 c.Print("DriftVelocities.png");
 ```
 
-<img src="curves.png" alt="Drift velocities" width="500"/>
+<center><img src="curves.png" alt="Drift velocities" width="500" /></center>
 
 ### Exercise 2. Generating a detector readout using a TRestDetectorReadout
 
@@ -199,6 +199,7 @@ Once we have generated a first MonteCarlo file we will process it with the file 
 2. **toHits (Geant4ToDetectorHits):** It transforms the Geant4 event type into a Detector hits event type. We loss particle name and geometry information.
 3. **eDiff (DetectorElectronDiffusion):** It implements the effect of charge diffusion on the gas.
 4. **smear (DetectorHitsSmearing):** It introduces the effect of the energy resolution of the detector.
+5. **hitsAna** (DetectorHitsAnalysis): It adds the energy observable to the analysis tree after the hits have been smeared.
 
 We will execute the process file `response.rml` using as input the `restG4` generated file, which should be something such as `Run01058_Electron_School.root`.
 
@@ -236,7 +237,7 @@ restManager --c response.rml --f data/Run01058_Electron_School.root
 The process will complain because it does not find any `TRestDetectorReadout` instance. The electron diffusion process will only consider those energy deposits inside the active readout area, and for that it requires that we add the readout we defined in the previous exercise.
 
 ```
-        <addMetadata type="TRestDetectorReadout" name="pixel" file="readouts.root" store="false" />
+    <addMetadata type="TRestDetectorReadout" name="pixel" file="readouts.root" store="false" />
 ```
 
 If we execute now the processing we should finally succeed,
