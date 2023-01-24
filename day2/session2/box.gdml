@@ -7,8 +7,10 @@
 <define>
        <variable name="world_size" value="120" />
        
-        <!-- The gas target -->
-	      <variable name="targetGasDensity" value="1.66201e-3"/> <!-- in g/cm3 -->
+        <!-- The gas target-->
+	<variable name="quencherDensity" value="2.51*0.01"/> <!-- mg/cm3 -->
+        <variable name="quencherFraction" value="0.01"/>
+	<variable name="targetGasDensity" value="1.66201e-3"/> <!-- in g/cm3 -->
         <variable name="gasTemperature" value="300"/> <!-- K -->
         <variable name="gasPressure" value="1"/> <!-- bar -->
 
