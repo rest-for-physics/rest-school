@@ -25,7 +25,7 @@ class Dummy : public TObject {
       void SetX(float x) { fX = x; }
       void SetY(float y) { fY = y; }
       void SetTempValue(int v) { fTempValue = v; }
-      Float_t GetX(float x) { retunr fX; }
+      Float_t GetX(float x) { return fX; }
       Float_t GetY(float y) { return fY; }
       Int_t GetTempValue(int v) { return fTempValue; }
 
@@ -121,7 +121,7 @@ make
 Once compilation has suceeded, and before testing our new library, we must define few installation instructions that will help cmake to decide where the final compiled binaries should be placed. This can be done by adding the following lines to our `CMakeLists.txt`.
 
 ```
-install (TARGETS Dummy Main
+install (TARGETS Dummy
          ARCHIVE DESTINATION lib
          LIBRARY DESTINATION lib
          RUNTIME DESTINATION bin)
@@ -180,8 +180,17 @@ root [9] f->Close()
 Optionally we can also add an executable program, that we will name `MainDummy`, and that makes use of the class found at the Dummy library.
 
 ```
-add_executable(MainDummy MainDummy.cxx)
-target_link_libraries(MainDummy Dummy)
+add_executable(Main Main.cxx)
+target_link_libraries(Main Dummy)
+```
+
+You should also add the `Main` executable to the objects to be installed
+
+```
+install (TARGETS Dummy Main
+         ARCHIVE DESTINATION lib
+         LIBRARY DESTINATION lib
+         RUNTIME DESTINATION bin)
 ```
 
 We can write an executable inspired in our latest tests in the ROOT interactive shell.
