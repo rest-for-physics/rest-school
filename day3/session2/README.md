@@ -258,7 +258,7 @@ TCanvas c;
 TRestGeant4Event *g4Ev = new TRestGeant4Event();
 run0->SetInputEvent( g4Ev );
 run0->GetEntry(65)
-g4Ev->DrawEvent("graphXY[eIoni]:graphXZ[eIoni]:histXY(Cont0,colz)[binSize=3]:histXZ(Cont0,colz)[binSize=3]);
+g4Ev->DrawEvent("graphXY[eIoni]:graphXZ[eIoni]:histXY(Cont0,colz)[binSize=1]:histXZ(Cont0,colz)[binSize=1]);
 c.Print("Geant4Hits.png")
 ```
 
@@ -288,6 +288,8 @@ You may change the above values to even higher ones to check the effect. Then, a
 
 <p align="center"> <img src="hits2.png" alt="High diffusion effect" width="600"/> </p>
 
+**HINT:** When you use the `TCanvas::Print` method to save the image to file we may use any other format supported by ROOT. We may even save it as a macro `.C` or a `.root` file so that we will be able later to improve the image quality and aspect by modifying the `.C` macro, or opening the `.root` file in an editable canvas.
+
 #### Exercise 3.2 Visualizing the smeared energy spectrum
 
 Now we can also check the effect of the smearing process on the energy resolution of the electrons.
@@ -306,6 +308,8 @@ hits->Draw("same")
 c1->Print("smear.png");
 .q
 ```
+
+<p align="center"> <img src="smear.png" alt="Smeared spectra versus original" width="600"/> </p>
 
 **REMINDER:** We are using `restRoot` to quickly open one file, but remember that we can do at any time
 
