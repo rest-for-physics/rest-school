@@ -132,7 +132,7 @@ for n in range(nEntries):
 
 **NOTE:** In the same way as `PrintMetadata` might help to understand where the information is stored inside the class data members, the `PrintEvent` method implementation of each specific event type might help to understand how the event information can be accessed directly.
 
-**THINKING:** Can you write a loop to calculate average number of tracks for this run?
+**THINKING:** Can you write a loop to calculate the average number of tracks for this run?
 
 ### Exercise 5. Drawing events
 
