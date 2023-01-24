@@ -119,7 +119,7 @@ graph2.Draw("same");
 c.Print("DriftVelocities.png");
 ```
 
-<center><img src="curves.png" alt="Drift velocities" width="500" /></center>
+<p align="center"> <img src="curves.png" alt="Drift velocities" width="500" /></p>
 
 ### Exercise 2. Generating a detector readout using a TRestDetectorReadout
 
