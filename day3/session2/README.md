@@ -65,7 +65,59 @@ gas.GetLongitudinalDiffusion()
 
 This time the returned value is not given in the default units, there are some exceptions that will be always indicated in the [method documentation](https://sultan.unizar.es/rest/classTRestDetectorGas.html#afdede862e3382b8bc6dacb139d828938).
 
-**TODO**: Optionally generate the curves for a couple of gas mixtures as a function of the electric field.
+
+#### Exercise 1.1. Comparing two gas curves.
+
+We can prepare a small macro to compare two gas curves. We will give the commands in a ROOT interactive shell, but probably it is interesting to create a macro and execute it.
+
+
+First we will load two different gas definitions:
+
+```
+TRestDetectorGas gas1("server", "Neon-Isobutane 1Pct 10-10E3Vcm");
+TRestDetectorGas gas2("server", "Neon-Isobutane 3Pct 10-10E3Vcm" );
+```
+
+Then we will create some nodes of electric field where we will evaluate the gas drift velocity. We define the variables where we will place these values:
+
+```
+Int_t nPoints = 100; 
+Double_t eMin = 100;
+Double_t eMax = 500;
+vector<Double_t> eField(nPoints), vDrift1(nPoints), vDrift2(nPoints);
+```
+
+We then define the electric field values manually and retrieve the corresponding drift velocity at each gas mixture and electric field.
+
+```
+for (int i = 0; i < nPoints; i++) { 
+    eField[i] = eMin + (double)i * (eMax - eMin) / nPoints;  
+    gas1.SetElectricField(eField[i] / units("V/cm")); 
+    vDrift1[i] = gas1.GetDriftVelocity(); 
+    gas2.SetElectricField(eField[i] / units("V/cm")); 
+    vDrift2[i] = gas2.GetDriftVelocity(); 
+}
+```
+
+We can then create a canvas, and two graphs with the datasets we just generated:
+
+```
+TCanvas c("Drift velocity", "");
+TGraph graph1(nPoints, &eField[0], &vDrift1[0]);
+TGraph graph2(nPoints, &eField[0], &vDrift2[0]);
+
+graph1.SetTitle("Drift velocities");
+graph1.GetXaxis()->SetTitle("E [V/cm]");
+graph1.GetYaxis()->SetTitle("Drift velocity [mm/us]");
+graph1.GetYaxis()->SetUserRange(15,28);
+graph1.SetLineColor(kRed);
+graph1.SetLineWidth(3);
+graph2.SetLineColor(kBlack);
+graph2.SetLineWidth(3);
+graph1.Draw("LP");
+graph2.Draw("same");
+c.Print("DriftVelocities.png");
+```
 
 ### Exercise 2. Generating a detector readout using a TRestDetectorReadout
 
