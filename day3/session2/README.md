@@ -73,13 +73,15 @@ A readout can be included inside a processing chain, and it serves to find the r
 
 In this exercise we will use the pixel detector readout that can be found at the [basic-readouts](https://github.com/rest-for-physics/basic-readouts) repository (we highly encourage to look on that repository to get further insights related to the readout generation and usage).
 
-We have copied the file `pixelReadouts.rml` into this repository so that is is more accessible. We will just need to update it so that it covers the proper detector area that we will use in the next exercise. In the next exercise we define a box centered in the `(0,0,0)` with a total drift distance of 1-m defined in the Z-axis, and a total active area of 0.5x0.5-m2. Thus, in our readout we will need to adapt the readout area by updating the number of pixels and the size per pixel. We will also define a unique readout plane that will be placed at `(0,0,-500)`.
+We have copied the file `pixelReadouts.rml` into this repository so that is is more accessible. We will just need to update it so that it covers the proper detector area that we will use in the next exercise. In the next exercise we define a box centered in the `(0,0,0)` with a total drift distance of 1-m defined in the Z-axis, and a total active area of 0.5x0.5-m2. 
+
+Thus, in our readout we will need to adapt the readout area by updating the number of pixels and the size per pixel. We will also define a unique readout plane that will be placed at `(0,0,-500)`.
 
 Follow the following steps to update your readout:
 1. Remove one of the `readoutPlane` sections found inside the `readouts.rml` file.
 2. Update the `position` in the remaining readout plane to `(0,0,-500)mm`.
 3. Update the `cathodePosition` to `(0,0,500)mm`.
-4. Update the default value of the pixel pitch and pixel size so that it covers by default an area of 0.5x0.5-m2.
+4. Update the default value of the pixel pitch and pixel size so that it covers by default an area of 0.5x0.5-m2. For example redefining the pitch to 5cm `<variable name="PITCH" value="50" overwrite="false" />` and `<variable name="PITCH" value="100" overwrite="false" />`.
 
 Once this is done just launch the readout generation:
 
@@ -250,3 +252,4 @@ in order to get access to the analysis tree.
 
 ### Exercise 4. Detector event reconstruction
 
+In the following case exercise we 
