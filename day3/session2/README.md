@@ -141,10 +141,10 @@ Once this is done just launch the readout generation:
 
 ```
 restRoot
-root [0] TRestDetectorReadout readout("readouts.rml");
-root [1] TFile *f = TFile::Open("readouts.root", "RECREATE" );
-root [2] readout.Write("pixel");
-root [3] f->Close();
+TRestDetectorReadout readout("readouts.rml");
+TFile *f = TFile::Open("readouts.root", "RECREATE" );
+readout.Write("pixel");
+f->Close();
 .q
 ``` 
 
@@ -154,17 +154,17 @@ We may test now our readout to check that it is as we expected:
 
 ```
 restRoot
-root [0] TFile *f = TFile::Open("readouts.root");
-root [1] auto readout = f->Get<TRestDetectorReadout>("pixel");
-root [2] readout->PrintMetadata();
-root [3] readout->GetNumberOfChannels()
+TFile *f = TFile::Open("readouts.root");
+auto readout = f->Get<TRestDetectorReadout>("pixel");
+readout->PrintMetadata();
+readout->GetNumberOfChannels()
 ```
 
 And test some of the methods implemented inside the readout, such as retrieving the X and Y positions of a given, `planeId=0`, `moduleId=0` and `channelId=2250`.
 
 ```
-root [3] Double_t x = readout->GetX(0, 0, 2250); 
-root [4] Double_t y = readout->GetY(0, 0, 2250); 
+Double_t x = readout->GetX(0, 0, 2250); 
+Double_t y = readout->GetY(0, 0, 2250); 
 ```
 
 or recover the corresponding daq channel id corresponding to a given `(x,y)` coordinates.
@@ -212,7 +212,7 @@ restManager --c response.rml --f data/Run01058_Electron_School.root
 The error message tells you that the electron diffusion process is missing some parameters which are required. Those parameters can be initialized using the `TRestDetectorGas`. Thus, we can solve the error by adding a `TRestDetectorGas` definition. You may use any gas mixture you wish, for example:
 
 ```
-        <TRestDetectorGas name="Neon-Isobutane 2Pct 10-10E3Vcm" pressure="1" file="server" />
+<TRestDetectorGas name="Neon-Isobutane 2Pct 10-10E3Vcm" pressure="1" file="server" />
 ```
 
 Once you add the gas defintion, executing again the `response.rml`,
@@ -224,8 +224,8 @@ restManager --c response.rml --f data/Run01058_Electron_School.root
 will lead to a different error. This time the gas is defined but the electron diffusion process does not know which electric field should use to obtain the gas properties. We need to define the electric field and the pressure inside the `TRestDetectorElectronDiffusionProcess`.
 
 ```
-            <parameter name="gasPressure" value="10" />
-            <parameter name="electricField" value="1kV/cm" />
+<parameter name="gasPressure" value="10" />
+<parameter name="electricField" value="1kV/cm" />
 ```
 
 Finally, we will have to solve one last error when we try to re-execute the processing.
@@ -237,7 +237,7 @@ restManager --c response.rml --f data/Run01058_Electron_School.root
 The process will complain because it does not find any `TRestDetectorReadout` instance. The electron diffusion process will only consider those energy deposits inside the active readout area, and for that it requires that we add the readout we defined in the previous exercise.
 
 ```
-    <addMetadata type="TRestDetectorReadout" name="pixel" file="readouts.root" store="false" />
+<addMetadata type="TRestDetectorReadout" name="pixel" file="readouts.root" store="false" />
 ```
 
 If we execute now the processing we should finally succeed,
@@ -250,36 +250,43 @@ restManager --c response.rml --f data/Run01058_Electron_School.root
 
 We had activated `inputEventStorage` inside `response.rml` so that we will have available both, the `TRestGeant4Event` input and the `TRestDetectorHitsEvent` output events.
 
-We may know checkout the effect of diffusion by visualizing the events inside the generated file:
+We may now checkout the effect of diffusion by visualizing the events inside the generated file:
 
 ```
 restRoot data/Run01058_response_Electron.root
-root [0] run0->GetEntry(15)
-root [1] TCanvas c;
-root [2] ev0->DrawEvent("hist(Cont0,colz)[3]");
-root [3] c.Print("DetectorHits.png");
-root [4] TRestGeant4Event *g4Ev = new TRestGeant4Event();
-root [5] run0->SetInputEvent( g4Ev );
-root [6] run0->GetEntry(15);
-root [7] g4Ev->DrawEvent("hist(Cont0,colz)[3]");
-root [8] c.Print("Geant4Hits.png")
-root [9] .q
+TCanvas c;
+TRestGeant4Event *g4Ev = new TRestGeant4Event();
+run0->SetInputEvent( g4Ev );
+run0->GetEntry(65)
+g4Ev->DrawEvent("graphXY[eIoni]:graphXZ[eIoni]:histXY(Cont0,colz)[binSize=3]:histXZ(Cont0,colz)[binSize=3]);
+c.Print("Geant4Hits.png")
 ```
+
+<p align="center"> <img src="g4Event.png" alt="MonteCarlo truth" width="600"/> </p>
+
+```
+TRestDetectorHitsEvent *ev = new TRestDetectorHitsEvent();
+run0->SetInputEvent(ev);
+run0->GetEntry(65);
+ev->DrawEvent("hist(colz)[3]");
+c.Print("DetectorHits.png");
+.q
+```
+
+<p align="center"> <img src="hits.png" alt="Low diffusion effect" width="400"/> </p>
 
 If you see no much difference between `DetectorHits.png` and `Geant4Hits.png` it might be that the conditions chosen do not produce an appreciable diffusion in the present configuration. It is also possible to define the longitudinal and transversal diffusion parameters manually to a higher value so that we can appreciate the effect. If we define the parameters explicitely, then these parameters will override the values extracted from the `TRestDetectorGas` definition.
 
 Try to add the following parameters now, and re-visualize the diffused event:
 
 ```
-    <parameter name="longDiff" value="0.1" />
-    <parameter name="transDiff" value="0.1" />
+<parameter name="longDiff" value="0.05" />
+<parameter name="transDiff" value="0.05" />
 ```
 
-You may change the above values to even higher ones to check the effect. Then, after processing have a look to the diffused `TRestDetectorHitsEvent`.
+You may change the above values to even higher ones to check the effect. Then, after processing have a look to the diffused `TRestDetectorHitsEvent` to observe a blurrier event.
 
-<table>
-<tr><td> <img src="g4Event.png" alt="Diffusion effect" width="400"/> </td> <td> <img src="hits.png" alt="Diffusion effect" width="400"/> </td> </tr>
-</table>
+<p align="center"> <img src="hits2.png" alt="High diffusion effect" width="400"/> </p>
 
 #### Exercise 3.2 Visualizing the smeared energy spectrum
 
@@ -287,17 +294,17 @@ Now we can also check the effect of the smearing process on the energy resolutio
 
 ```
 restRoot data/Run01058_response_Electron.root
-root [0] ana_tree0->Draw("hitsAna_energy>>hits(100,0,2000)" );
-root [1] ana_tree0->Draw("g4Ana_totalEdep>>g4(100,0,2000)" );
-root [2] hits->SetLineColor(kBlack);
-root [4] hits->SetFillColor(46);
-root [5] hits->SetFillColorAlpha(kRed, 0.35);
-root [6] g4->SetLineColor(kBlack);
-root [5] g4->SetFillColorAlpha(kBlue, 0.25);
-root [7] g4->Draw()
-root [8] hits->Draw("same")
-root [9] c1->Print("smear.png");
-root [10] .q
+ana_tree0->Draw("hitsAna_energy>>hits(100,0,2000)" );
+ana_tree0->Draw("g4Ana_totalEdep>>g4(100,0,2000)" );
+hits->SetLineColor(kBlack);
+hits->SetFillColor(46);
+hits->SetFillColorAlpha(kRed, 0.35);
+g4->SetLineColor(kBlack);
+g4->SetFillColorAlpha(kBlue, 0.25);
+g4->Draw()
+hits->Draw("same")
+c1->Print("smear.png");
+.q
 ```
 
 **REMINDER:** We are using `restRoot` to quickly open one file, but remember that we can do at any time

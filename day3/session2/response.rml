@@ -59,6 +59,10 @@ internal values are saved.
             <parameter name="resolutionReference" value="15" />
         </addProcess>
 
+        <addProcess type="TRestDetectorHitsAnalysisProcess" name="hitsAna" title="Extracting energy from smeared hits">
+            <observable name="energy" />
+        </addProcess>
+
     </TRestProcessRunner>
 
     <addTask type="processEvents" value="ON"/>
