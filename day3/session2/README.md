@@ -121,9 +121,6 @@ c.Print("DriftVelocities.png");
 
 <img src="curves.png" alt="Drift velocities" width="500"/>
 
-![Drift velocities](curves.png?raw=true "Drift velocities")
-
-
 ### Exercise 2. Generating a detector readout using a TRestDetectorReadout
 
 A readout can be included inside a processing chain, and it serves to find the relation between the electronic channels of the detector and the physical readout channels, as well as to define the topology of the readout. Typical processes that use the readout are `TRestDetectorHitsToSignalProcess` and `TRestDetectorSignalToHitsProcess` for event reconstruction, or `TRestDetectorElectronDiffusion` for diffusing the the charge produced by a Geant4 simulation.
@@ -278,6 +275,10 @@ Try to add the following parameters now, and re-visualize the diffused event:
 ```
 
 You may change the above values to even higher ones to check the effect. Then, after processing have a look to the diffused `TRestDetectorHitsEvent`.
+
+<table>
+<tr><td> <img src="g4Event.png" alt="Diffusion effect" width="400"/> </td> <td> <img src="hits.png" alt="Diffusion effect" width="400"/> </td> </tr>
+</table>
 
 #### Exercise 3.2 Visualizing the smeared energy spectrum
 
