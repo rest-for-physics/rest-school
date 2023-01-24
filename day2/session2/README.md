@@ -261,5 +261,7 @@ In this exercise you will learn how to create a simple *rml* file for g4Analysis
 </TRestManager>
 ```
  **Activity 1:** Create your own **g4analyis.rml** file and launch analysis ```restManager  --f fileName.root -c g4analysis.rml```. 
+ 
  **Activity 2:** Once a root file has been created, open a root session ```restRoot -m 1``` and use the ```new TBrowser``` to explore the Tree inside the Analysis file you have created.
+ 
  **Extra activity:** Explore this [file](https://github.com/rest-for-physics/geant4lib/blob/master/src/TRestGeant4AnalysisProcess.cxx) to know more about G4Analysis observables.
