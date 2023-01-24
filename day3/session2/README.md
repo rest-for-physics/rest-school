@@ -273,7 +273,7 @@ c.Print("DetectorHits.png");
 .q
 ```
 
-<p align="center"> <img src="hits.png" alt="Low diffusion effect" width="400"/> </p>
+<p align="center"> <img src="hits.png" alt="Low diffusion effect" width="600"/> </p>
 
 If you see no much difference between `DetectorHits.png` and `Geant4Hits.png` it might be that the conditions chosen do not produce an appreciable diffusion in the present configuration. It is also possible to define the longitudinal and transversal diffusion parameters manually to a higher value so that we can appreciate the effect. If we define the parameters explicitely, then these parameters will override the values extracted from the `TRestDetectorGas` definition.
 
@@ -286,7 +286,7 @@ Try to add the following parameters now, and re-visualize the diffused event:
 
 You may change the above values to even higher ones to check the effect. Then, after processing have a look to the diffused `TRestDetectorHitsEvent` to observe a blurrier event.
 
-<p align="center"> <img src="hits2.png" alt="High diffusion effect" width="400"/> </p>
+<p align="center"> <img src="hits2.png" alt="High diffusion effect" width="600"/> </p>
 
 #### Exercise 3.2 Visualizing the smeared energy spectrum
 
