@@ -119,6 +119,8 @@ graph2.Draw("same");
 c.Print("DriftVelocities.png");
 ```
 
+<img src="curves.png" alt="Drift velocities" width="500"/>
+
 ![Drift velocities](curves.png?raw=true "Drift velocities")
 
 
