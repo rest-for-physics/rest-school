@@ -119,6 +119,9 @@ graph2.Draw("same");
 c.Print("DriftVelocities.png");
 ```
 
+![Drift velocities](curves.png?raw=true "Drift velocities")
+
+
 ### Exercise 2. Generating a detector readout using a TRestDetectorReadout
 
 A readout can be included inside a processing chain, and it serves to find the relation between the electronic channels of the detector and the physical readout channels, as well as to define the topology of the readout. Typical processes that use the readout are `TRestDetectorHitsToSignalProcess` and `TRestDetectorSignalToHitsProcess` for event reconstruction, or `TRestDetectorElectronDiffusion` for diffusing the the charge produced by a Geant4 simulation.
