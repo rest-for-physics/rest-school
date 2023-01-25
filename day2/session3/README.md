@@ -71,6 +71,14 @@ rn.GetMetadata( mdNames[1] ).PrintMetadata()
 
 We may now use any method defined at the recovered metadata instance.
 
+You can alternativelly open the root file with restRoot through command line: `restRoot ../../data/R11567_00001_RawToTrack_Background_21hr_jgalan_2.3.15.root`
+In this case, TRestRun objects and metadata objects can be directly accessed in the prompt.
+
+```c++
+run0->PrintMetadata()
+md0_hitsAna->PrintMetadata()
+```
+
 ### Exercise 3. Accessing data members from a stored metadata object
 
 We can access the metadata members defined in each class (you may check the corresponding members by exploring the header file, the [class documentation](https://sultan.unizar.es/rest/classes.html) (recommended), or by invoking `Dump()` for a given metadata instance. For example, the [TRestRawVetoAnalysisProcess](https://sultan.unizar.es/rest/classTRestRawVetoAnalysisProcess.html) contains a metadata member named `fThreshold` which was used during the data processing.
