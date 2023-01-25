@@ -186,11 +186,20 @@ for x in range(0,512):
 rawEv.AddSignal(sgnl)
 ```
 
-Now we just need to initialize the process using a configuration file (where is the configuration file?)
+
+Now we just need to initialize the process using a configuration file:
 
 ```
 addNoiseProcess = ROOT.TRestRawSignalAddNoiseProcess("metadata.rml")
 ```
+**NOTE:** We need to create the `meatada.rml` file first to define the process parameters:
+
+```
+<processes>
+<TRestRawSignalAddNoiseProcess noiseLevel="10" name="noise" value="ON" />
+</processes>
+```
+
 
 then we are ready to test our event processing for our dummy generated event
 
@@ -222,6 +231,11 @@ We may create a new file `shaping.C` where we will define a method,
 ```
 Int_t shaping( ) {
 
+.
+.
+.
+
+return0;
 }
 ```
 
@@ -236,6 +250,8 @@ In a similar way as we did in the previous example we will first create a dummy 
 
     sgnl->IncreaseBinBy(170, 100);
     sgnl->IncreaseBinBy(250, 250);
+    sgnl->SetID(1);
+    cout << sgnl->GetID() << endl;
 
     ev->AddSignal(*sgnl);
 ```
@@ -251,15 +267,18 @@ Then we initialize the shaping process using an RML file,
 We may visualize the event before processing it:
 
 ```
-    TCanvas c;
+    TCanvas *c = new TCanvas();
+    c->Divide(2,1);
+    c->cd(1);
     ev->DrawEvent();
 ```
 
 and then we can process and visualize it again:
 
 ```
-TRestRawSignalEvent* shapedEvent = (TRestRawSignalEvent*) shaper->ProcessEvent(ev);
-shapedEvent->DrawEvent()
+    TRestRawSignalEvent* shapedEvent = (TRestRawSignalEvent*) shaper->ProcessEvent(ev);
+    c->cd(2);
+    shapedEvent->DrawEvent();
 ```
 
 #### Exercise 4.3. Rawlib pipeline validation
@@ -269,5 +288,3 @@ The previous exercises are based on the examples found at the rawlib [pipeline d
 ### Example 5: Using pyRoot and numpy to quickly visualize rawsignals and derived parameters 
 
 This example, `PyRoot_SignalPlotter.ipynb`, is a Jupyter notebook. It demonstrates how we can combine ROOT and REST with python mathematical libraries to examine raw signals, while quickly visualizing noise reduction parameters. This could be a more convenient way for those who havce already some experience using `numpy` and `matplotlib.pyplot` libraries.
-
-**TODO**: Since this notebook already uses many REST functions, it will be presented in more detail in another session.
