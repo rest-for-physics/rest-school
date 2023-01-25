@@ -320,6 +320,8 @@ run.GetAnalysisTree()
 
 in order to get access to the analysis tree.
 
-### Exercise 4. Detector event reconstruction
+### Exercise 4. Transforming our detector hits into a rawsignal electronics acquisition signal 
 
 In the following case exercise we 
+
+<p align="center"> <img src="rawsignals.png" alt="Rawsignals generated through Monte Carlo" width="600"/> </p>
