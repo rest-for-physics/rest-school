@@ -114,7 +114,7 @@ graph1.SetLineColor(kRed);
 graph1.SetLineWidth(3);
 graph2.SetLineColor(kBlack);
 graph2.SetLineWidth(3);
-graph1.Draw("LP");
+graph1.Draw("ALP");
 graph2.Draw("same");
 c.Print("DriftVelocities.png");
 ```
@@ -258,7 +258,7 @@ TCanvas c;
 TRestGeant4Event *g4Ev = new TRestGeant4Event();
 run0->SetInputEvent( g4Ev );
 run0->GetEntry(65)
-g4Ev->DrawEvent("graphXY[eIoni]:graphXZ[eIoni]:histXY(Cont0,colz)[binSize=1]:histXZ(Cont0,colz)[binSize=1]);
+g4Ev->DrawEvent("graphXY[eIoni]:graphXZ[eIoni]:histXY(Cont0,colz)[binSize=1]:histXZ(Cont0,colz)[binSize=1]");
 c.Print("Geant4Hits.png")
 ```
 
