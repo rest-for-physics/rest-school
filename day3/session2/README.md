@@ -195,8 +195,8 @@ restG4 electrons.rml
 
 Once we have generated a first MonteCarlo file we will process it with the file `response.rml`. The `response.rml` file defines 4 processes:
 
-1. **g4Ana (Geant4Analysis):** It extracts some relevant information from the Geant4 event (or MonteCarlo truth).
-2. **toHits (Geant4ToDetectorHits):** It transforms the Geant4 event type into a Detector hits event type. We loss particle name and geometry information.
+1. **g4Ana ([Geant4Analysis](https://sultan.unizar.es/rest/classTRestGeant4AnalysisProcess.html)):** It extracts some relevant information from the Geant4 event (or MonteCarlo truth).
+2. **toHits ([Geant4ToDetectorHits](https://sultan.unizar.es/rest/classTRestGeant4ToDetectorHitsProcess.html)):** It transforms the Geant4 event type into a Detector hits event type. We loss particle name and geometry information.
 3. **eDiff (DetectorElectronDiffusion):** It implements the effect of charge diffusion on the gas.
 4. **smear (DetectorHitsSmearing):** It introduces the effect of the energy resolution of the detector.
 5. **hitsAna** (DetectorHitsAnalysis): It adds the energy observable to the analysis tree after the hits have been smeared.
@@ -320,8 +320,23 @@ run.GetAnalysisTree()
 
 in order to get access to the analysis tree.
 
-### Exercise 4. Transforming our detector hits into a rawsignal electronics acquisition signal 
+### Exercise 4. Transforming our detector hits into a rawsignal (electronics acquisition-like data)
 
-In the following case exercise we 
+In the following exercise we will process the detector hits and we will use the readout to identify the contribution to each of the detector channel readouts. The process [TRestDetectorHitsToSignalProcess](https://sultan.unizar.es/rest/classTRestDetectorHitsToSignalProcess.html) will be responsible to perform such transformation, translating the Z-coordinate into a physical time using the drift time, and the XY-coordinates into a daq channel using the readout definition.
+
+Then we will transform the physical amplitudes and times inside the `TRestDetectorSignalEvent` into a `TRestRawSignalEvent` format that will start to resemble the data format obtained from the detector electronics, the responsible for such transformation is a [TRestDetectorSignalToRawSignalProcess](https://sultan.unizar.es/rest/classTRestDetectorSignalToRawSignalProcess.html), then we will introduce an artificial electronic shaping using [TRestRawSignalShapingProcess](https://sultan.unizar.es/rest/classTRestRawSignalShapingProcess.html).
+
+The following processes are defined inside the file `toRawSignals.rml`.
+
+1. **toDetSignal (HitsToSignal)**: It translates the Z-coordinate into a physical time using the drift time, and the XY-coordinates into a electronics channel.
+2. **toRawSignal (SignalToRawSignal)**: It transforms the physical times and amplitudes into a fixed sampling time binning using a trigger definition.
+3. **shaping (SignalShaping)**: It convolutes the input amplitudes with a given waveform to give a shape to the signal that mimics the shaping of the electronics.
+4. **noise (AddNoise)**: It introduces white noise to the signal. In this example is disabled, but you may try to enable it to check the effecnt on the signal.
+
+We may use then that RML definition to produce our rawsignals by further processing the response file generated in the previous exercise:
+
+```
+restManager --c toRawSignals.rml --f Run01058_response_Electron.root
+```
 
 <p align="center"> <img src="rawsignals.png" alt="Rawsignals generated through Monte Carlo" width="600"/> </p>
