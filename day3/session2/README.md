@@ -272,6 +272,7 @@ TRestDetectorHitsEvent *ev = new TRestDetectorHitsEvent();
 run0->SetInputEvent(ev);
 run0->GetEntry(65);
 ev->DrawEvent("hist(colz)[3]");
+ev->DrawEvent("hist(colz)[1]");
 c.Print("DetectorHits.png");
 .q
 ```
