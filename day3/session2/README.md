@@ -300,8 +300,8 @@ Now we can also check the effect of the smearing process on the energy resolutio
 
 ```
 restRoot data/Run01058_response_Electron.root
-ana_tree0->Draw("hitsAna_energy>>hits(100,0,2000)" );
-ana_tree0->Draw("g4Ana_totalEdep>>g4(100,0,2000)" );
+ana_tree0->Draw("hitsAna_energy>>hits(200,0,1000)" );
+ana_tree0->Draw("g4Ana_totalEdep>>g4(200,0,1000)" );
 hits->SetLineColor(kBlack);
 hits->SetFillColor(46);
 hits->SetFillColorAlpha(kRed, 0.35);
