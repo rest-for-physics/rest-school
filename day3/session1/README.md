@@ -101,7 +101,7 @@ restRoot R01208_quickData.root
 And we will check the observables we can find inside some of the events:
 
 ```
-root [0] run0->GetAnalysisTree()->PrintObservables()  // Why not run0->PrintObservables()? It works.
+root [0] run0->GetAnalysisTree()->PrintObservables() 
 root [1] run0->GetEntry(11)
 root [2] run0->GetAnalysisTree()->PrintObservables()
 ```
