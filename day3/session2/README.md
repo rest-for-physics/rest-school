@@ -132,10 +132,9 @@ We have copied the file `pixelReadouts.rml` into this repository so that is is m
 Thus, in our readout we will need to adapt the readout area by updating the number of pixels and the size per pixel. We will also define a unique readout plane that will be placed at `(0,0,-500)`.
 
 Follow the following steps to update your readout:
-1. Remove one of the `readoutPlane` sections found inside the `readouts.rml` file.
-2. Update the `position` in the remaining readout plane to `(0,0,-500)mm`.
-3. Update the `cathodePosition` to `(0,0,500)mm`.
-4. Update the default value of the pixel pitch and pixel size so that it covers by default an area of 0.5x0.5-m2. For example redefining the pitch to 5cm `<variable name="PITCH" value="50" overwrite="false" />` and `<variable name="PITCH" value="100" overwrite="false" />`.
+1. Update the `position` in the remaining readout plane to `(0,0,-500)mm`.
+2. Update the `cathodePosition` to `(0,0,500)mm`.
+3. Update the default value of the pixel pitch and pixel size so that it covers by default an area of 0.5x0.5-m2. For example redefining the pitch to 5cm `<variable name="PITCH" value="50" />` and `<variable name="N_CHANNELS" value="100" />`.
 
 Once this is done just launch the readout generation:
 
