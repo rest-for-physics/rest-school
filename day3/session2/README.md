@@ -260,7 +260,10 @@ run0->SetInputEvent( g4Ev );
 run0->GetEntry(65)
 g4Ev->DrawEvent("graphXY[eIoni]:graphXZ[eIoni]:histXY(Cont0,colz)[binSize=1]:histXZ(Cont0,colz)[binSize=1]");
 c.Print("Geant4Hits.png")
+g4Ev->PrintEvent()
 ```
+
+**NOTE**: The different options that we may use for drawing a `TRestGeant4Event` can be found inside the [TRestGeant4Event::DrawEvent() method documentation](https://sultan.unizar.es/rest/classTRestGeant4Event.html#affd87c2cf6ac5c85825cdd71baac7a25).
 
 <p align="center"> <img src="g4Event.png" alt="MonteCarlo truth" width="600"/> </p>
 
