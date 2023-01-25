@@ -190,11 +190,11 @@ In this exercise you will learn how to create an RML file to launch a restG4 sim
  ```
     </restG4>
  ```
- **Activity 1:** Create your own **basic.rml** file and launch simulation ```restG4 basic.rml```. 
+ **Activity 1:** Create your own **basicSim.rml** file and launch simulation ```restG4 basic.rml```. 
  
  **Activity 2:** Once a root file has been created, open a root session ```restRoot -m 1``` and use the macro ```REST_Geant4_ViewEvent("fileName.root")``` to visualise the geometry and the particle tracks; use the ```new TBrowser``` to explore the Tree inside the file.
  
- **Extra activity:** Go to [examples](https://github.com/rest-for-physics/restG4/tree/master/examples) to choose any other *generator* or a different geometry.
+ **Extra activity:** Go to [examples](https://github.com/rest-for-physics/restG4/tree/master/examples) and to the [documentation](https://sultan.unizar.es/rest/classTRestGeant4Metadata.html) to choose any other *generator* or a different geometry.
  
  ### Exercise 3. Create an  *RML* file to launch a g4Analysis
 In this exercise you will learn how to create a simple *rml* file for g4Analysis.
@@ -264,4 +264,4 @@ In this exercise you will learn how to create a simple *rml* file for g4Analysis
  
  **Activity 2:** Once a root file has been created, open a root session ```restRoot -m 1``` and use the ```new TBrowser``` to explore the Tree inside the Analysis file you have created.
  
- **Extra activity:** Explore this [file](https://github.com/rest-for-physics/geant4lib/blob/master/src/TRestGeant4AnalysisProcess.cxx) to know more about G4Analysis observables.
+ **Extra activity:** Explore the [TRestGeant4Analysis documentation](https://sultan.unizar.es/rest/classTRestGeant4AnalysisProcess.html) to know more about G4Analysis observables.
