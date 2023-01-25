@@ -109,7 +109,7 @@ TGraph graph2(nPoints, &eField[0], &vDrift2[0]);
 graph1.SetTitle("Drift velocities");
 graph1.GetXaxis()->SetTitle("E [V/cm]");
 graph1.GetYaxis()->SetTitle("Drift velocity [mm/us]");
-graph1.GetYaxis()->SetUserRange(15,28);
+graph1.GetYaxis()->SetRangeUser(15,28);
 graph1.SetLineColor(kRed);
 graph1.SetLineWidth(3);
 graph2.SetLineColor(kBlack);
