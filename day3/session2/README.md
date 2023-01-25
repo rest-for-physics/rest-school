@@ -174,7 +174,8 @@ Int_t moduleId = -1;
 Int_t channelId = -1;
 
 Int_t daqId = readout->GetHitsDaqChannel(TVector3(50, 70, 12.5), planeId, moduleId, channelId);
-std::cout << "Channel id: " << daqId << std::endl;
+std::cout << "DAQ id: " << daqId << std::endl;
+std::cout << "Plane id: " << planeId << " module id: " << moduleId << " channelId: " << channelId << std::endl;
 ```
 
 **NOTE:** The channel id returned is the value corresponding to the daq channel id that is associated with the electronics acquisition system. If no decoding file was provided, then the physical readout channel number will be equal to the daq channel id.
