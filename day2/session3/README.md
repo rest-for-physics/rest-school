@@ -75,8 +75,9 @@ You can alternativelly open the root file with restRoot through command line: `r
 In this case, TRestRun objects and metadata objects can be directly accessed in the prompt.
 
 ```c++
-run0->PrintMetadata()
-md0_hitsAna->PrintMetadata()
+root [0] run0->PrintMetadata()
+root [1] md0_hitsAna->PrintMetadata()
+root [2] md0_sAna->GetParameter("integralRange")
 ```
 
 ### Exercise 3. Accessing data members from a stored metadata object
