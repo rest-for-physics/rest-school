@@ -344,3 +344,6 @@ restManager --c toRawSignals.rml --f Run01058_response_Electron.root
 ```
 
 <p align="center"> <img src="rawsignals.png" alt="Rawsignals generated through Monte Carlo" width="600"/> </p>
+
+- All processes inside the output file.
+- We can now test event reconstrucion of MonteCarlo data as we do with experimental data.
