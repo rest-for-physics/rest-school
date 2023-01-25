@@ -44,7 +44,7 @@ int nEntries =  rn->GetEntries();
 cout << "The number of entries is : " <<  nEntries << endl;
 ```
 
-**NOTE:** We will work here with the `RawTrack` files that belong to `fSubRunNumber=00001` since those files were generated using `TRestProcessRunner::fInputEventStorage=True` and `TRestProcessRunner::fOuputEventStorage=True`, therefore they contain all the intermediate event types generated during the data chain.
+There are also non-REST objects stored in the file. We can see by typing `.ls` in ROOT prompt and there are histograms shown also. Try to plot them.
 
 ### Exercise 2. Accessing the stored metadata objects using TRestRun
 
@@ -70,6 +70,17 @@ rn.GetMetadata( mdNames[1] ).PrintMetadata()
 
 
 We may now use any method defined at the recovered metadata instance.
+
+You can alternativelly open the root file with restRoot through command line: `restRoot ../../data/R11567_00001_RawToTrack_Background_21hr_jgalan_2.3.15.root`
+In this case, TRestRun objects and metadata objects can be directly accessed in the prompt.
+
+```c++
+root [0] run0->PrintMetadata()
+root [1] md0_hitsAna->PrintMetadata()
+root [2] md0_sAna->GetParameter("integralRange")
+```
+
+You can also have a look of the file contents through `TBrowser` GUI. By right clicking the metadata object in the list, you can retrieve data in it. 
 
 ### Exercise 3. Accessing data members from a stored metadata object
 
