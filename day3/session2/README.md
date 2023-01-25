@@ -320,7 +320,7 @@ run.GetAnalysisTree()
 
 in order to get access to the analysis tree.
 
-### Exercise 4. Transforming our detector hits into a rawsignal electronics acquisition signal 
+### Exercise 4. Transforming our detector hits into a rawsignal (electronics acquisition-like data)
 
 In the following exercise we will process the detector hits and we will use the readout to identify the contribution to each of the detector channel readouts. The process [TRestDetectorHitsToSignalProcess](https://sultan.unizar.es/rest/classTRestDetectorHitsToSignalProcess.html) will be responsible to perform such transformation, translating the Z-coordinate into a physical time using the drift time, and the XY-coordinates into a daq channel using the readout definition.
 
