@@ -89,7 +89,7 @@ This time we will use a file coming from some tests that were performed at the I
 Now we can process our file to produce some observables that will be used for analysis later on.
 
 ```
-restManager --c veto.rml --f R01208_Ar2Iso_Background14h_14Vetos_IccubFEC-000.aqs
+restManager --c veto.rml --f ../../data/R01208_Ar2Iso_Background14h_14Vetos_IccubFEC-000.aqs
 ```
 
 Note that the output filename is now much more shorter since we have chosen it to be this way at the `TRestRun` section. We will open now the file for quick inspection.
