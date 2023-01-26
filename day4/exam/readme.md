@@ -7,10 +7,8 @@ The following figure shows an example event.
 
 ![xx](sample_event.png)
 
-In this exam, you will need to write your own analysis code for such detector. It should contain: 
+In this exercise, you will need to write your own analysis code for such detector. It should contain: 
 * A new event class containing energy(s), rise time(s), triggered time(s), pulse FWHM(s) and pulse width 1/10 height(s).
 * A new process to convert TRestRawSignalEvent to our new event type, and extract observables like baseline noise level, first trigger position, etc.
 
-For the exercise we suggest you to write new c++ codes of you own. Don't use the existing methods like `GetPointsOverThreshold()` from TRestRawSignal.
-
-The template class code can also be found in this directory.
+**Hint** You can take a look at the code of `TRestRawSignalAnalysisProcess` and `TRestRawToDetectorSignalProcess` for reference. You can also use the existing methods from `TRestRawSignalEvent` class. The template code for this exercise can be found in this directory.
