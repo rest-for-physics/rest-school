@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<TRestManager name="CoBoDataAnalysis" title="Example" verboseLevel="info" >
+
+  <TRestRun name="DummyRawSignalGeneration" >
+  </TRestRun>
+
+  <TRestProcessRunner name="Processor" verboseLevel="info">
+	      <parameter name="inputAnalysisStorage" value="off"/>
+	  <addProcess type="TRestRawSignalForgeProcess" name="virtualDAQ" value="ON"/>
+  </TRestProcessRunner>
+
+  <addTask type="processEvents" value="ON"/>
+
+</TRestManager>
+
+

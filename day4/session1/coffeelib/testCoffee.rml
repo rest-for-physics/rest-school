@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<TRestManager>
+
+    <globals>
+        <parameter name="mainDataPath" value="data/" />
+
+        <variable name="RUN_TYPE" value="BasicRaw" overwrite="false" />
+
+        <variable name="BL_MIN" value="20" overwrite="false" />
+        <variable name="BL_MAX" value="200" overwrite="false" />
+
+        <variable name="INT_MIN" value="200" overwrite="false" />
+        <variable name="INT_MAX" value="500" overwrite="false" />
+
+        <variable name="NPOINTS" value="7" overwrite="false" />
+        <variable name="POINT_TH" value="2.2" overwrite="false" />
+        <variable name="SGNL_TH" value="1" overwrite="false" />
+
+        <variable name="SAMPLING" value="20ns" overwrite="false" />
+        <variable name="PRESSURE" value="1.38169" overwrite="false" /> <!--1.4 bar (1.38169 in atm) -->
+        <variable name="DRIFT_FIELD" value="100" overwrite="false" /> <!-- Units: V/cm -  but standard REST units are V/mm!!-->
+        <variable name="DRIFT_VELOCITY" value="" overwrite="false" />
+
+        <variable name="AQS_FILENAME_FORMAT" value="R[fRunNumber]_[fRunTag]_Vm_[TRestDetector::fAmplificationVoltage]_Vd_[TRestDetector::fDriftVoltage]_Pr_[TRestDetector::fPressure]_Gain_[TRestDetector::fElectronicsGain]_Shape_[TRestDetector::fElectronicsShaping]_Clock_[TRestDetector::fElectronicsClock]-[fParentRunNumber].aqs"/>
+
+    </globals>
+
+    <TRestRun name="CAST-Ar" title="CAST Ar data taking" verboseLevel="silent">
+        <parameter name="experiment" value="CAST"/>
+        <parameter name="runNumber" value="preserve"/>
+        <parameter name="runTag" value="preserve"/>
+        <parameter name="runType" value="${RUN_TYPE}"/>
+        <parameter name="runDescription" value=""/>
+        <parameter name="user" value="${USER}"/>
+        <parameter name="verboseLevel" value="0"/>
+        <parameter name="overwrite" value="off" />
+
+        <parameter name="inputFormat" value="${AQS_FILENAME_FORMAT}"/>
+        <parameter name="outputFileName" value="R[fRunNumber]_[fParentRunNumber]_[fRunType]_[fRunTag]_[fRunUser]_[fVersion].root" />
+        <parameter name="readOnly" value="false" />
+
+        <TRestDetector name="detector" >
+            <parameter name="detectorName" value="Micromegas" />
+        </TRestDetector>
+
+        <TRestCoffee name="Coffee" >
+            <parameter name="CupSize" value="2" />
+        </TRestCoffee>
+    </TRestRun>
+
+    <TRestProcessRunner name="RawSignals" title="Raw processing and analysis" >
+
+        <parameter name="firstEntry" value="0" />
+        <parameter name="lastEntry" value="0" />
+        <parameter name="eventsToProcess" value="4900" />
+
+        <parameter name="inputEventStorage" value="False" />
+        <parameter name="outputEventStorage" value="True" />
+
+        <addProcess type="TRestRawMultiFEMINOSToSignalProcess" name="virtualDAQ" value="ON" verboseLevel="silent">
+            <parameter name="pedScript" value="ped"/>
+            <parameter name="runScript" value="run"/>
+            <parameter name="electronics" value="singleFeminos"/>
+            <parameter name="fileFormat" value="SJTU" />
+        </addProcess>
+
+        <addProcess type="TRestCoffeeProcess" name="cfp" value="ON" verboseLevel="silent"/>
+
+        <addProcess type="TRestRawSignalChannelActivityProcess" name="rawChActivity" value="ON"
+            lowThreshold="25" highThreshold="50" daqChannels="360" daqStartChannel="4320" daqEndChannel="4680"
+            readoutChannels="250" readoutStartChannel="0" readoutEndChannel="250" />
+
+            <addProcess type="TRestRawSignalRecoverChannelsProcess" name="recoverChannels" value="OFF" >
+                <parameter name="channelIds" value="{4541}" />
+            </addProcess>
+
+            <addProcess type="TRestRawVetoAnalysisProcess" name="veto" value="ON" vetoSignalId="4322"> 
+                <parameter name="baseLineRange" value="(10,100)"/>
+                <parameter name="range" value="(10,500)"/>
+                <parameter name="observable" value="all"/>
+                <parameter name="threshold" value="500"/>
+                <parameter name="timeWindow" value="100,300"/>
+            </addProcess>
+
+            <!-- Signal analysis -->
+            <addProcess type="TRestRawSignalAnalysisProcess" name="sAna" title="" verboseLevel="info" observable="all">
+
+                <!-- This parameter is used to define the baseline calculation -->
+                <parameter name="baseLineRange" value="(${BL_MIN},${BL_MAX})" />
+
+                <!-- This parameter is used to define the signal integration window -->
+                <parameter name="integralRange" value="(${INT_MIN},${INT_MAX})" />
+
+                <!-- These parameters define the integral with threshold.
+                    threshold : number of baseline noise sigmas to consider a point for integration.
+                    pointsOverThreshold : Number of consecutive points over threshold to be considered for integration.
+                    minPeakAmplitude : Minimum peak signal amplitude to be considered at all.
+                -->
+                <parameter name="pointThreshold" value="${POINT_TH}" />
+                <parameter name="pointsOverThreshold" value="${NPOINTS}" />
+                <parameter name="signalThreshold" value="${SGNL_TH}" />
+            </addProcess>
+
+            <addProcess type="TRestEventRateAnalysisProcess" name="rateAna" observables="all" value="ON"/>
+
+        </TRestProcessRunner>
+
+        <addTask type="processEvents" value="ON" />
+
+    </TRestManager>
