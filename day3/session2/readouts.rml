@@ -35,31 +35,4 @@
         </readoutPlane>
 
     </TRestDetectorReadout>
-
-    <TRestDetectorReadout name="pixelDecoding" title="A basic pixel readout with 25-channels decoding." verboseLevel="warning">
-
-        <constant name="nChannels" value="5" />
-        <constant name="pixelSize" value="5" />
-
-        <parameter name="mappingNodes" value="0" />
-
-        <readoutModule name="pixelModule" size="(nChannels*pixelSize, nChannels*pixelSize)" tolerance="1.e-4" >
-            <for variable="nChX" from="0" to="nChannels-1" step="1" >
-                <for variable="nChY" from="0" to="nChannels-1" step="1" >
-                    <readoutChannel id="${nChX}*nChannels+${nChY}" >
-                        <addPixel id="0" origin="(${nChX}*pixelSize, ${nChY}*pixelSize)" size="(pixelSize,pixelSize)" rotation="0" />
-                    </readoutChannel>
-                </for>
-            </for>
-        </readoutModule>
-
-        <readoutPlane position="(0,0,0)mm" planeVector="(0,0,1)" chargeCollection="1" cathodePosition="(0,0,100)mm">
-            <addReadoutModule id="0" name="pixelModule" origin="(-0.5*nChannels*pixelSize,-0.5*nChannels*pixelSize)" rotation="0" decodingFile="dummy.dec" firstDaqChannel="0" />
-        </readoutPlane>
-
-        <readoutPlane position="(0,0,0)mm" planeVector="(0,0,1)" chargeCollection="1" cathodePosition="(0,0,100)mm">
-            <addReadoutModule id="0" name="pixelModule" origin="(-0.5*nChannels*pixelSize,-0.5*nChannels*pixelSize)" rotation="0" decodingFile="dummy.dec" firstDaqChannel="nChannels*nChannels" />
-        </readoutPlane>
-
-    </TRestDetectorReadout>
 </readouts>

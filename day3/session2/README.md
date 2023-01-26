@@ -109,12 +109,12 @@ TGraph graph2(nPoints, &eField[0], &vDrift2[0]);
 graph1.SetTitle("Drift velocities");
 graph1.GetXaxis()->SetTitle("E [V/cm]");
 graph1.GetYaxis()->SetTitle("Drift velocity [mm/us]");
-graph1.GetYaxis()->SetUserRange(15,28);
+graph1.GetYaxis()->SetRangeUser(15,28);
 graph1.SetLineColor(kRed);
 graph1.SetLineWidth(3);
 graph2.SetLineColor(kBlack);
 graph2.SetLineWidth(3);
-graph1.Draw("LP");
+graph1.Draw("ALP");
 graph2.Draw("same");
 c.Print("DriftVelocities.png");
 ```
@@ -132,10 +132,9 @@ We have copied the file `pixelReadouts.rml` into this repository so that is is m
 Thus, in our readout we will need to adapt the readout area by updating the number of pixels and the size per pixel. We will also define a unique readout plane that will be placed at `(0,0,-500)`.
 
 Follow the following steps to update your readout:
-1. Remove one of the `readoutPlane` sections found inside the `readouts.rml` file.
-2. Update the `position` in the remaining readout plane to `(0,0,-500)mm`.
-3. Update the `cathodePosition` to `(0,0,500)mm`.
-4. Update the default value of the pixel pitch and pixel size so that it covers by default an area of 0.5x0.5-m2. For example redefining the pitch to 5cm `<variable name="PITCH" value="50" overwrite="false" />` and `<variable name="PITCH" value="100" overwrite="false" />`.
+1. Update the `position` in the remaining readout plane to `(0,0,-500)mm`.
+2. Update the `cathodePosition` to `(0,0,500)mm`.
+3. Update the default value of the pixel pitch and pixel size so that it covers by default an area of 0.5x0.5-m2. For example redefining the pitch to 5cm `<variable name="PITCH" value="50" />` and `<variable name="N_CHANNELS" value="100" />`.
 
 Once this is done just launch the readout generation:
 
@@ -175,7 +174,8 @@ Int_t moduleId = -1;
 Int_t channelId = -1;
 
 Int_t daqId = readout->GetHitsDaqChannel(TVector3(50, 70, 12.5), planeId, moduleId, channelId);
-std::cout << "Channel id: " << daqId << std::endl;
+std::cout << "DAQ id: " << daqId << std::endl;
+std::cout << "Plane id: " << planeId << " module id: " << moduleId << " channelId: " << channelId << std::endl;
 ```
 
 **NOTE:** The channel id returned is the value corresponding to the daq channel id that is associated with the electronics acquisition system. If no decoding file was provided, then the physical readout channel number will be equal to the daq channel id.
@@ -258,9 +258,12 @@ TCanvas c;
 TRestGeant4Event *g4Ev = new TRestGeant4Event();
 run0->SetInputEvent( g4Ev );
 run0->GetEntry(65)
-g4Ev->DrawEvent("graphXY[eIoni]:graphXZ[eIoni]:histXY(Cont0,colz)[binSize=1]:histXZ(Cont0,colz)[binSize=1]);
+g4Ev->DrawEvent("graphXY[eIoni]:graphXZ[eIoni]:histXY(Cont0,colz)[binSize=1]:histXZ(Cont0,colz)[binSize=1]");
 c.Print("Geant4Hits.png")
+g4Ev->PrintEvent()
 ```
+
+**NOTE**: The different options that we may use for drawing a `TRestGeant4Event` can be found inside the [TRestGeant4Event::DrawEvent() method documentation](https://sultan.unizar.es/rest/classTRestGeant4Event.html#affd87c2cf6ac5c85825cdd71baac7a25).
 
 <p align="center"> <img src="g4Event.png" alt="MonteCarlo truth" width="600"/> </p>
 
@@ -269,6 +272,7 @@ TRestDetectorHitsEvent *ev = new TRestDetectorHitsEvent();
 run0->SetInputEvent(ev);
 run0->GetEntry(65);
 ev->DrawEvent("hist(colz)[3]");
+ev->DrawEvent("hist(colz)[1]");
 c.Print("DetectorHits.png");
 .q
 ```
@@ -296,8 +300,8 @@ Now we can also check the effect of the smearing process on the energy resolutio
 
 ```
 restRoot data/Run01058_response_Electron.root
-ana_tree0->Draw("hitsAna_energy>>hits(100,0,2000)" );
-ana_tree0->Draw("g4Ana_totalEdep>>g4(100,0,2000)" );
+ana_tree0->Draw("hitsAna_energy>>hits(200,0,1000)" );
+ana_tree0->Draw("g4Ana_totalEdep>>g4(200,0,1000)" );
 hits->SetLineColor(kBlack);
 hits->SetFillColor(46);
 hits->SetFillColorAlpha(kRed, 0.35);
@@ -340,3 +344,6 @@ restManager --c toRawSignals.rml --f Run01058_response_Electron.root
 ```
 
 <p align="center"> <img src="rawsignals.png" alt="Rawsignals generated through Monte Carlo" width="600"/> </p>
+
+- All processes inside the output file.
+- We can now test event reconstrucion of MonteCarlo data as we do with experimental data.
