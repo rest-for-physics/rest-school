@@ -101,7 +101,57 @@ and test everything is recognized as expected inside a `restRoot` session.
 
 ### Exercise 4 Tryout the newly added metadata and process
 
-Now it's time to add our new metadata and process to the process chain!
+Now it's time to add our new metadata and process to the process chain. You will need day3's rml file as a starting point.
+
+Copy it with:
+
+```
+cp ../../day3/session1/cast.rml testCoffee.rml
+```
+
+Then open the file with vim, insert:
+
+```xml
+<TRestCoffee name="Coffee" >
+    <parameter name="CupSize" value="2" />
+</TRestCoffee>
+```
+
+under `TRestRun` section, and insert:
+
+```xml
+<addProcess type="TRestCoffeeProcess" name="cfp" value="ON" verboseLevel="silent"/>
+```
+
+after `TRestRawMultiFEMINOSToSignalProcess`. Now you will have the new process chain modified. Run the new process by:
+
+```
+restManager --c testCoffee.rml --f ../../data/R10513_Calibration_15min_Vm_340_Vd_113_Pr_1.4_Gain_0x1_Shape_0xD_Clock_0x02-000.aqs
+```
+
+Nothing will change during execution. But when you open the output file with restRoot, you can see the two new metadata objects contained.
+
+```
+root [1] .ls
+TFile**         data/R10513_00000_BasicRaw_Calibration_15min_nkx_2.3.15.root
+ TFile*         data/R10513_00000_BasicRaw_Calibration_15min_nkx_2.3.15.root
+  OBJ: TTree    EventTree       REST Event Tree : 0 at: 0x7fffe5d91890
+  OBJ: TRestAnalysisTree        AnalysisTree    REST Process Analysis Tree : 0 at: 0x7fffe62f6640
+  OBJ: TH1D     daqChannelActivityRaw   daqChannelActivityRaw : 0 at: 0x7fffe3c9d270
+  KEY: TTree    EventTree;1     REST Event Tree
+  KEY: TRestAnalysisTree        AnalysisTree;1  REST Process Analysis Tree
+  KEY: TH1D     daqChannelActivityRaw;1 daqChannelActivityRaw
+  KEY: TRestDetector    detector;1      Default TRestDetector
+  KEY: TRestCoffee      Coffee;1        Default TRestCoffee
+  KEY: TRestRun CAST-Ar;1       CAST Ar data taking
+  KEY: TRestProcessRunner       RawSignals;1    Raw processing and analysis
+  KEY: TRestRawMultiFEMINOSToSignalProcess      virtualDAQ;1    Default TRestRawMultiFEMINOSToSignalProcess
+  KEY: TRestCoffeeProcess       cfp;1   Default TRestCoffeeProcess
+  KEY: TRestRawSignalChannelActivityProcess     rawChActivity;1 Default TRestRawSignalChannelActivityProcess
+  KEY: TRestRawVetoAnalysisProcess      veto;1  Default TRestRawVetoAnalysisProcess
+  KEY: TRestRawSignalAnalysisProcess    sAna;1
+  KEY: TRestEventRateAnalysisProcess    rateAna;1       Default TRestEventRateAnalysisProcess
+```
 
 ### Exercise 5 Modifying the code and have some change!
 
