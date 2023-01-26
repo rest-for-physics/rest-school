@@ -113,7 +113,6 @@ Then open the file with vim, insert:
 
 ```xml
 <TRestCoffee name="Coffee" >
-    <parameter name="CupSize" value="2" />
 </TRestCoffee>
 ```
 
@@ -153,9 +152,86 @@ TFile**         data/R10513_00000_BasicRaw_Calibration_15min_nkx_2.3.15.root
   KEY: TRestEventRateAnalysisProcess    rateAna;1       Default TRestEventRateAnalysisProcess
 ```
 
-### Exercise 5 Modifying the code and have some change!
+### Exercise 5 Modify the code and have some change!
 
-We can add some code to 
+It's time to add real changes to our code. We start by making the process printing something on the screen. 
+Insert the code inside `TRestCoffeeProcess::ProcessEvent()` method like following:
+
+```c++
+TRestEvent* TRestCoffeeProcess::ProcessEvent(TRestEvent * evInput) {
+    fAnaEvent = (TRestRawSignalEvent*)evInput;
+    
+    std::cout << "Event ID: " << fAnaEvent->GetID()
+              << ", Number Of Signals: " << fAnaEvent->GetNumberOfSignals() << std::endl;
+
+    return fAnaEvent;
+}
+```
+
+Then back to the build directory, type `make install` to rebuild the project(in principle only the modified process needs to be compiled). 
+
+In the terminal of rest-school, you can directly re-call the previous `reatManager` command. You will be able to see various messages shown on the screen.
+
+
+### Exercise 6 Add a datamember
+
+We shall now make `TRestCoffee` a real *coffee*. We start by adding related data members.
+
+```c++
+class TRestCoffee : public TRestMetadata {
+private:
+    Double_t fCupSize = 0;  //
+    Double_t fInitialWater = 0;  //
+    Double_t fInitialSugar = 0;  //
+    Double_t fBestSugarRatio = 0;  //
+
+    void Initialize() override;
+public:
+    Double_t GetCupSize() { return fCupSize;}
+    Double_t GetInitialWater() { return fInitialWater; }
+    Double_t GetInitialSugar() { return fInitialSugar; }
+    Double_t GetBestSugarRatio() { return fBestSugarRatio; }
+    
+    ...
+};
+```
+
+We also implement its `PrintMetadata()` method:
+
+```c++
+void TRestCoffee::PrintMetadata() {
+    TRestMetadata::PrintMetadata();
+
+    RESTMetadata << " - Cup Size (kg): " << fCupSize << RESTendl;
+    RESTMetadata << " - Initial Water amount(kg): " << fInitialWater << RESTendl;
+    RESTMetadata << " - Initial Sugar amount(kg): " << fInitialSugar << RESTendl;
+    RESTMetadata << " - Best sugar-to-water ratio : " << fBestSugarRatio << RESTendl;
+
+}
+```
+
+These data members are correlated with rml parameters. We update the parameters like:
+
+```xml
+<TRestCoffee name="Coffee" >
+    <parameter name="cupSize" value="300g"/>
+    <parameter name="initialWater" value="100g"/>
+    <parameter name="initialSugar" value="0g"/>
+    <parameter name="bestSugarRatio" value="0.01"/>
+</TRestCoffee>
+```
+
+### Exercise 7 Access metadata from the process
+
+
+
+
+
+
+### Exercise 8 Generate observables from the process
+
+
+
 
 
 
