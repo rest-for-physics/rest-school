@@ -34,7 +34,7 @@ Most of those definitions are mandatory in a REST-for-Physics library, where we 
 
 On top of that we have added an additional `examples` directory for adding a dummy configuration file.
 
-#### Exercise 1.2 Creating the source metadata and process classes
+### Exercise 2 Creating the source metadata and process classes
 
 We have created two framework macros that will assist you with the generation of an skeleton metadata and process class, and that it will provide guidelines on documentation. There are few code comments that need to be reviewed and removed afterwards!
 
@@ -59,7 +59,7 @@ Our coffe library is ready for compilation!
 
 **NOTE:** The `REST_MakeProcess` macro allows two additional arguments that allow you to define the input and output event types. However, our library does not define yet an event type, and thus it will just be a non specialed `TRestEvent`. Therefore, it will be able to connect at any point of the event data processing chain in between any library processes.
 
-#### Exercise 1.3 Compiling our new library
+### Exercise 3 Compiling our new library
 
 Now go to the framework build directory, and check the new library is recognized by the framework.
 
@@ -98,22 +98,17 @@ make -j install
 
 and test everything is recognized as expected inside a `restRoot` session.
 
-#### Exercise 1.4 Modifying our new metadata and process
+
+### Exercise 4 Tryout the newly added metadata and process
+
+Now it's time to add our new metadata and process to the process chain!
+
+### Exercise 5 Modifying the code and have some change!
+
+We can add some code to 
 
 
-### Final exercise. Exam for getting an official REST-for-Physics certificate!
 
-Suppose now we are going to establish a set of analysis schema for a new experiment. 
-To simplify, we assume the detector only contains one readout module with one readout channel. Like an HPGe detector. The daq system triggers
-at each event, and records one single waveform(TRestRawSignal) within 512 sampling window. There could be multiple pulses inside one window.
-
-The analysis for such detector needs: 
-* A new event class containing energy(s), rise time(s), triggered time(s), pulse FWHM(s) and pulse width 1/10 height(s).
-* A new process to convert TRestRawSignalEvent to our new event type, and extract observables like baseline noise level, first trigger position, etc.
-
-For the exercise we suggest you to write new c++ codes of you own. Don't use the existing methods like `GetPointsOverThreshold()` from TRestRawSignal.
-
-Here are the examples:
 
 
 
