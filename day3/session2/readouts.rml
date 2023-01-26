@@ -9,8 +9,8 @@
 
     <TRestDetectorReadout name="pixelReadout" title="A basic pixel readout ${PITCH}mm-Pitch ${N_CHANNELS}x${N_CHANNELS} channels" verboseLevel="warning">
 
-        <constant name="pitch" value="${PITCH}" overwrite="false" />
-        <constant name="nChannels" value="${N_CHANNELS}" overwrite="false" />
+        <constant name="pitch" value="${PITCH}" />
+        <constant name="nChannels" value="${N_CHANNELS}" />
         <constant name="pixelSize" value="${PITCH}" />
 
         <parameter name="mappingNodes" value="0" />
