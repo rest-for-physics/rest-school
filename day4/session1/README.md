@@ -20,7 +20,8 @@ We create a new file `CMakeLists.txt` with the following contents:
 set(LibraryVersion "1.0")
 add_definitions(-DLIBRARY_VERSION="${LibraryVersion}")
 
-COMPILELIB("")
+set(deps "")
+COMPILELIB(deps)
 
 ADD_LIBRARY_TEST()
 ```
