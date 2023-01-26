@@ -173,7 +173,7 @@ Then back to the build directory, type `make install` to rebuild the project(in 
 In the terminal of rest-school, you can directly re-call the previous `reatManager` command. You will be able to see various messages shown on the screen.
 
 
-### Exercise 6 Add a datamember
+### Exercise 6 Add data members in metadata
 
 We shall now make `TRestCoffee` a real *coffee*. We start by adding related data members.
 
@@ -183,14 +183,12 @@ private:
     Double_t fCupSize = 0;  //
     Double_t fInitialWater = 0;  //
     Double_t fInitialSugar = 0;  //
-    Double_t fBestSugarRatio = 0;  //
 
     void Initialize() override;
 public:
     Double_t GetCupSize() { return fCupSize;}
     Double_t GetInitialWater() { return fInitialWater; }
     Double_t GetInitialSugar() { return fInitialSugar; }
-    Double_t GetBestSugarRatio() { return fBestSugarRatio; }
     
     ...
 };
@@ -205,34 +203,98 @@ void TRestCoffee::PrintMetadata() {
     RESTMetadata << " - Cup Size (kg): " << fCupSize << RESTendl;
     RESTMetadata << " - Initial Water amount(kg): " << fInitialWater << RESTendl;
     RESTMetadata << " - Initial Sugar amount(kg): " << fInitialSugar << RESTendl;
-    RESTMetadata << " - Best sugar-to-water ratio : " << fBestSugarRatio << RESTendl;
-
 }
 ```
 
-These data members are correlated with rml parameters. We update the parameters like:
+These data members are correlated with rml parameters with certain naming convention. We update the rml like:
 
 ```xml
 <TRestCoffee name="Coffee" >
     <parameter name="cupSize" value="300g"/>
     <parameter name="initialWater" value="100g"/>
     <parameter name="initialSugar" value="0g"/>
-    <parameter name="bestSugarRatio" value="0.01"/>
 </TRestCoffee>
 ```
 
 ### Exercise 7 Access metadata from the process
 
+Our `TRestCoffeeProcess` is going to make a perfert coffee by adding water and sugar into it. Include the header first:
+
+```c++
+#include "TRestCoffee.h"
+```
+
+Define the data members, including max water, amount of water/sugar to add, and current amount of water/sugar inside the cup:
+
+```c++
+class TRestCoffeeProcess : public TRestEventProcess {
+private:
+    TRestRawSignalEvent* fAnaEvent;  //!
+    void Initialize() override;
+    Bool_t fSuccessfull = false;
+    Double_t fMaxWater = 0;  
+    Double_t fWaterToAdd = 0;   
+    Double_t fSugarToAdd = 0;    
+    Double_t fWater = 0;     //!
+    Double_t fSugar = 0;     //!
+public:
+...
+};
+```
+
+**Note:** Since the amount of water/sugar is kind of temporary variable during execution, there is no need to keep them as *metadata*. 
+We can add `//!` annotation to prevent them being stored.
+
+Before starting, we need to know the current status of our coffee. Write in its `InitProcess()` method:
+
+```c++
+TRestCoffee* coffee = GetMetadata<TRestCoffee>();
+fMaxWater = coffee->GetCupSize();
+fWater = coffee->GetInitialWater();
+fSugar = coffee->GetInitialSugar();
+```
+
+Now, write in the `ProcessEvent()` method to make a coffee! Assume we add 1 gram of water and 0.02 grams of sugar each time. 
+When it comes to the best mixture(1%), we stop the process. If the Water 
 
 
+```c++
+TRestEvent* TRestCoffeeProcess::ProcessEvent(TRestEvent* evInput) {
+    fAnaEvent = (TRestRawSignalEvent*)evInput;
 
+    if (fWater >= fMaxWater) {
+        std::cout << "Water is full!" << std::endl;
+    } else if (!fSuccessfull) {
+        fWater += fWaterToAdd;
+        fSugar += fSugarToAdd;
 
+        if (fWater / fSugar < 100) {
+            std::cout << "Made a perfect cup of coffee!" << std::endl;
+            fSuccessfull = true;
+        }
+    }
+
+    return fAnaEvent;
+}
+```
+
+We can recompile the code now. Also don't forget to modify the rml:
+
+```xml
+<addProcess type="TRestCoffeeProcess" name="cfp" value="ON" verboseLevel="silent" waterToAdd="1g" sugarToAdd="0.02g"/>
+```
+
+Run the process and you can see it is successful.
 
 ### Exercise 8 Generate observables from the process
 
+We can also record the water/sugar ratio at each step. Just add simply one line to the `ProcessEvent()` method:
 
+```c++
+SetObservableValue("WaterToSugarRatio", fWater / fSugar);
+```
 
-
+Recompile the code and you will see the difference.
 
 
 
