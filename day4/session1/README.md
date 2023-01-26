@@ -2,9 +2,9 @@ You will need to move to the directory day4/session2 to match the proposed comma
 
 ### Exercise 1. Creating a dummy library with a metadata and a process
 
-We are now going to create a dummy library that will contain a metadata and a process.
+We are now going to create a dummy library that will contain a metadata and a process. As shown in the slides, this library will be at the same level as REST official libraries.
 
-For that we can create a new directory inside the framework libraries, you might search for inspiration or even reuse any `CMakeLists.txt` from an existing library.
+First we create a new directory inside the framework libraries, and put a CMake file in it. You might search for inspiration or even reuse any `CMakeLists.txt` from an existing library.
 
 ```
 cd framework/source/libraries
