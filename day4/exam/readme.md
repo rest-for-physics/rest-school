@@ -13,6 +13,6 @@ In this exercise, you will need to write your own analysis code for such detecto
 
 **Hint** You can take a look at the code of `TRestRawSignalAnalysisProcess` and `TRestRawToDetectorSignalProcess` for reference. You can also use the existing methods from `TRestRawSignalEvent` class. 
 
-**HINT** To find multiple peaks, `TSpectrum` functionality from ROOT could be used.
+**HINT** To find multiple peaks, [`TSpectrum`](https://root.cern.ch/doc/v624/classTSpectrum.html) functionality from ROOT could be used.
 
 The template code for this exercise can be found in the same directory. You need to first organize them into proper library directory structure, and compile them as what we do in the morning. Then, you can try to fill-in the codes of your own to complete the job!
