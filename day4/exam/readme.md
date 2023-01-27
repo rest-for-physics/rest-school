@@ -15,4 +15,4 @@ In this exercise, you will need to write your own analysis code for such detecto
 
 **HINT** To find multiple peaks, `TSpectrum` functionality from ROOT could be used.
 
-The template code for this exercise can be found in this directory. You need to first organize them into proper library directory structure, and compile the code as what we do in the morning. Then, you can try to fill-in the codes of your own to complete the job!
+The template code for this exercise can be found in the same directory. You need to first organize them into proper library directory structure, and compile them as what we do in the morning. Then, you can try to fill-in the codes of your own to complete the job!
