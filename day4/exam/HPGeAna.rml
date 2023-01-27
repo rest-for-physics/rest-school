@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<TRestManager name="CoBoDataAnalysis" title="Example" verboseLevel="info" >
+
+  <TRestRun name="HPGe_Test" >
+  </TRestRun>
+
+  <TRestProcessRunner name="Processor" verboseLevel="info">
+    <addProcess type="TRestRawSignalToHPGeProcess" name="proc" value="ON"/>
+  </TRestProcessRunner>
+
+  <addTask type="processEvents" value="ON"/>
+
+</TRestManager>
+
+
+<!--paramater here is accessible to all the classes-->
+
+
