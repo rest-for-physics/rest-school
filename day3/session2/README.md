@@ -234,13 +234,13 @@ Finally, we will have to solve one last error when we try to re-execute the proc
 restManager --c response.rml --f data/Run01058_Electron_School.root
 ```
 
-The process will complain because it does not find any `TRestDetectorReadout` instance. The electron diffusion process will only consider those energy deposits inside the active readout area, and for that it requires that we add inside the `<TRestRun>` section the readout we defined in the previous exercise. 
+The process will complain because it does not find any `TRestDetectorReadout` instance. The electron diffusion process will only consider those energy deposits inside the active readout area. For that it requires that we add inside the `<TRestRun>` section the readout we defined in the previous exercise by adding the `<addMetadata` line to our existing `TRestRun` definition.
 
 ```
 <TRestRun>
-...
-<addMetadata type="TRestDetectorReadout" name="pixel" file="readouts.root" store="false" />
-...
+    ...
+    <addMetadata type="TRestDetectorReadout" name="pixel" file="readouts.root" store="false" />
+    ...
 </TRestRun>
 ```
 
