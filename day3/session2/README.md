@@ -246,11 +246,13 @@ The process will complain because it does not find any `TRestDetectorReadout` in
 
 **HINT:**  You will find an example for this at the [TREX-DM data processing pipeline](https://github.com/rest-for-physics/framework/blob/master/pipeline/trex/run.xml).
 
-If we execute now the processing we should finally succeed,
+If we execute now the processing, after including the `addMetadata` line, we should finally succeed,
 
 ```
 restManager --c response.rml --f data/Run01058_Electron_School.root
 ```
+
+**NOTE**: The `TRestRun` class is the main responsible to open REST files in a coherent way, and it gives access (or centralizes access) to any metadata objects that have been used during the data processing. Thus, before processing the user may add any necessary metadata definitions inside the `TRestRun` section. Usually these are added using a `<TRestXYZClass> ... </TRestXYZClass>` definition, however, when the metadata definition is already stored inside a ROOT file we use the `addMetadata` section name. See for example the axion helioscope [ray-tracing processing chain definition](https://github.com/rest-for-physics/axionlib/blob/master/examples/full-ray-tracing/helioscope.rml), where several metadata definitions, `TRestAxionSolarFlux`, `TRestAxionMagneticField`, ..., `TRestAxionXrayWindow` are added inside the `TRestRun` section and can be used by processes. In that example, the metadata definitions will use of an external RML definition such as the case of [fluxes.rml](https://github.com/rest-for-physics/axionlib-data/blob/cae7d4df4ca2f0bef5a2268602cf090fdf4a208d/solarFlux/fluxes.rml).
 
 #### Exercise 3.1 Visualizing the diffused events
 
