@@ -127,7 +127,7 @@ A readout can be included inside a processing chain, and it serves to find the r
 
 In this exercise we will use the pixel detector readout that can be found at the [basic-readouts](https://github.com/rest-for-physics/basic-readouts) repository (we highly encourage to look on that repository to get further insights related to the readout generation and usage).
 
-We have copied the file `pixelReadouts.rml` into this repository so that is is more accessible. We will just need to update it so that it covers the proper detector area that we will use in the next exercise. In the next exercise we define a box centered in the `(0,0,0)` with a total drift distance of 1-m defined in the Z-axis, and a total active area of 0.5x0.5-m2. 
+We have copied the file `pixelReadouts.rml` into this repository (named here as `readouts.rml`) so that it is more accessible. We will just need to update it so that it covers the proper detector area that we will use in the next exercise. In the next exercise we define a box centered in the `(0,0,0)` with a total drift distance of 1-m defined in the Z-axis, and a total active area of 0.5x0.5-m2. 
 
 Thus, in our readout we will need to adapt the readout area by updating the number of pixels and the size per pixel. We will also define a unique readout plane that will be placed at `(0,0,-500)`.
 
